@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "atool-build": "^0.7.0",
+    "antd-md-loader": "^0.7.0",
     "colorful": "^2.1.0",
     "commander": "^2.9.0",
     "dora": "^0.3.2",
