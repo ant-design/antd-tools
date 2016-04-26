@@ -25,7 +25,7 @@
     "lint": "eslint lib"
   },
   "dependencies": {
-    "atool-build": "^0.6.6",
+    "atool-build": "^0.7.0",
     "colorful": "^2.1.0",
     "commander": "^2.9.0",
     "dora": "^0.3.2",
@@ -35,7 +35,9 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "merge-stream": "^1.0.0",
-    "ramda": "^0.21.0"
+    "mkdirp": "^0.5.1",
+    "ramda": "^0.21.0",
+    "through2": "^2.0.1"
   },
   "devDependencies": {
     "eslint": "^1.10.3",
