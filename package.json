@@ -1,0 +1,49 @@
+{
+  "name": "antd-tools",
+  "version": "0.1.0",
+  "description": "tools for ant design",
+  "keywords": [
+    "react",
+    "tools"
+  ],
+  "homepage": "http://github.com/ant-design/antd-tools",
+  "author": "yiminghe@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ant-design/antd-tools.git"
+  },
+  "bugs": {
+    "url": "http://github.com/ant-design/antd-tools/issues"
+  },
+  "licenses": "MIT",
+  "bin": {
+    "antd-tools": "./bin/antd-tools.js",
+    "antd-tools-run": "./bin/antd-tools-run.js"
+  },
+  "scripts": {
+    "publish": "git push origin",
+    "lint": "eslint lib"
+  },
+  "dependencies": {
+    "atool-build": "^0.6.6",
+    "colorful": "^2.1.0",
+    "commander": "^2.9.0",
+    "dora": "^0.3.2",
+    "dora-plugin-webpack": "^0.6.4",
+    "es3ify": "^0.2.1",
+    "gh-pages": "^0.11.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "merge-stream": "^1.0.0",
+    "ramda": "^0.21.0"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-plugin-react": "^3.16.1",
+    "eslint-config-airbnb": "^5.0.1",
+    "pre-commit": "1.x"
+  },
+  "pre-commit": [
+    "lint"
+  ]
+}
