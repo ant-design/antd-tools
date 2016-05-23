@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -37,6 +37,7 @@
     "dora-plugin-upload": "^0.3.1",
     "dora-plugin-webpack": "^0.6.4",
     "es3ify": "^0.2.1",
+    "es3ify-loader": "^0.2.0",
     "gh-pages": "^0.11.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
