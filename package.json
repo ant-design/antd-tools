@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -39,6 +39,7 @@
     "es3ify": "^0.2.1",
     "es3ify-loader": "^0.2.0",
     "gh-pages": "^0.11.0",
+    "glob": "~7.0.3",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "merge-stream": "^1.0.0",
