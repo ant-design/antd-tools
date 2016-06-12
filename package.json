@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -32,7 +32,6 @@
     "colorful": "^2.1.0",
     "commander": "^2.9.0",
     "dora": "^0.3.2",
-    "dora-plugin-hmr": "^0.5.0",
     "dora-plugin-livereload": "^0.3.0",
     "dora-plugin-upload": "^0.3.1",
     "dora-plugin-webpack": "^0.6.4",
