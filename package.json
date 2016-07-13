@@ -38,7 +38,7 @@
     "gh-pages": "^0.11.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
-    "tslint": "~3.10.2",
+    "tslint": "~3.13.0",
     "minimist": "~1.2.0",
     "mkdirp": "^0.5.1",
     "ramda": "^0.21.0",
@@ -46,9 +46,9 @@
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",
-    "eslint": "^1.10.3",
-    "eslint-config-airbnb": "^5.0.1",
-    "eslint-plugin-react": "^3.16.1",
+    "eslint": "^3.0.1",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-react": "^5.2.2",
     "pre-commit": "1.x"
   },
   "pre-commit": [
