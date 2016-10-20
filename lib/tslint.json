@@ -125,6 +125,7 @@
     "use-isnan": true,
     "variable-name": [
       true,
+      "allow-leading-underscore",
       "ban-keywords",
       "check-format",
       "allow-pascal-case"
