@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "0.13.10",
+  "version": "0.13.11",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -40,7 +40,7 @@
     "gulp-typescript": "~3.0.2",
     "gulp-watch": "^4.3.10",
     "merge2": "~1.0.2",
-    "minimist": "~1.2.0",
+    "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "object-assign": "~4.1.0",
     "ramda": "^0.21.0",
