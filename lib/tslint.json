@@ -139,6 +139,7 @@
       "check-separator",
       "check-type",
       "check-typecast"
-    ]
+    ],
+    "jsx-no-lambda": false
   }
 }
