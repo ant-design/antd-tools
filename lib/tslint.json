@@ -140,6 +140,7 @@
       "check-type",
       "check-typecast"
     ],
-    "jsx-no-lambda": false
+    "jsx-no-lambda": false,
+    "jsx-no-string-ref": false
   }
 }
