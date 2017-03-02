@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -48,7 +48,7 @@
     "through2": "^2.0.1",
     "tslint": "~3.15.1",
     "tslint-react": "^1.1.0",
-    "typescript": "~2.1.0"
+    "typescript": "~2.2.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.0",
