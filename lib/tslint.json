@@ -142,6 +142,7 @@
       "check-typecast"
     ],
     "jsx-no-lambda": false,
-    "jsx-no-string-ref": false
+    "jsx-no-string-ref": false,
+    "jsx-boolean-value": "never"
   }
 }
