@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -46,6 +46,7 @@
     "mkdirp": "^0.5.1",
     "object-assign": "~4.1.0",
     "ramda": "^0.23.0",
+    "rimraf": "^2.6.1",
     "through2": "^2.0.1",
     "tslint": "^4.5.1",
     "tslint-eslint-rules": "^3.5.1",
@@ -59,8 +60,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.4.1",
-    "pre-commit": "1.x",
-    "rimraf": "^2.6.1"
+    "pre-commit": "1.x"
   },
   "pre-commit": [
     "lint"
