@@ -53,8 +53,7 @@
     "through2": "^2.0.1",
     "tslint": "^4.5.1",
     "tslint-eslint-rules": "^3.5.1",
-    "tslint-react": "^2.5.0",
-    "typescript": "~2.2.1"
+    "tslint-react": "^2.5.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.0",
@@ -64,6 +63,9 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.4.1",
     "pre-commit": "1.x"
+  },
+  "peerDependencies": {
+    "typescript": "^2.2.1"
   },
   "pre-commit": [
     "lint"
