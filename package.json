@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -15,7 +15,7 @@
   "bugs": {
     "url": "http://github.com/ant-design/antd-tools/issues"
   },
-  "licenses": "MIT",
+  "license": "MIT",
   "bin": {
     "antd-tools": "./bin/antd-tools.js",
     "antd-tools-run": "./bin/antd-tools-run.js"
