@@ -63,7 +63,6 @@
     "no-switch-case-fall-through": false,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
-    "no-unused-new": true,
     "no-unused-variable": [
       true,
       { "ignore-pattern": "^React$" }
