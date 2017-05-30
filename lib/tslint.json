@@ -142,7 +142,7 @@
     ],
     "jsx-no-lambda": false,
     "jsx-no-string-ref": false,
-    "jsx-boolean-value": false,
+    "jsx-boolean-value": "never",
     "jsx-wrap-multiline": false
   }
 }
