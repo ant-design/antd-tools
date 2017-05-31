@@ -62,7 +62,7 @@
     "no-string-literal": true,
     "no-switch-case-fall-through": false,
     "no-trailing-whitespace": true,
-    "no-unused-expression": true,  
+    "no-unused-expression": true,
     "no-use-before-declare": false,
     "no-var-keyword": true,
     "no-var-requires": false,
@@ -138,7 +138,7 @@
     ],
     "jsx-no-lambda": false,
     "jsx-no-string-ref": false,
-    "jsx-boolean-value": "never",
+    "jsx-boolean-value": [true, "never"],
     "jsx-wrap-multiline": false
   }
 }
