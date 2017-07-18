@@ -47,7 +47,6 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "object-assign": "~4.1.0",
-    "ramda": "^0.23.0",
     "rimraf": "^2.6.1",
     "through2": "^2.0.1",
     "tslint": "^5.3.2",
