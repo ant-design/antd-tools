@@ -27,7 +27,9 @@
   },
   "dependencies": {
     "atool-build": "^0.11.0",
+    "babel-core": "^6.25.0",
     "babel-eslint": "^7.1.0",
+    "babel-jest": "^20.0.3",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-import": "^1.1.1",
     "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
@@ -43,6 +45,8 @@
     "gulp-babel": "^6.1.2",
     "gulp-typescript": "^3.1.6",
     "gulp-watch": "^4.3.10",
+    "jsonml.js": "^0.1.0",
+    "mark-twain": "^2.0.2",
     "merge2": "~1.0.2",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
