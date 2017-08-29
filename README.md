@@ -4,3 +4,8 @@
 [![Dependency Status](https://david-dm.org/ant-design/antd-tools.svg?style=flat-square)](https://david-dm.org/ant-design/antd-tools)
 
 Tools for Ant Design of React.
+
+
+## 2.0
+
+removed `.web.js/.web.less` relative code, suitable for antd-mobile@2.0.
