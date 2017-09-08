@@ -43,6 +43,7 @@
     "gh-pages": "^0.12.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
+    "gulp-strip-code": "^0.1.4",
     "gulp-typescript": "^3.1.6",
     "gulp-watch": "^4.3.10",
     "jsonml.js": "^0.1.0",
