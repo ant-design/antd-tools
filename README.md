@@ -5,6 +5,10 @@
 
 Tools for Ant Design of React.
 
+## 3.0.0
+
+Remove moment setting
+
 ## 2.1.0
 
 Add gulp-strip-code
