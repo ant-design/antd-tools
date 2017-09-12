@@ -5,6 +5,9 @@
 
 Tools for Ant Design of React.
 
+## 2.1.0
+
+Add gulp-strip-code
 
 ## 2.0
 
