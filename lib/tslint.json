@@ -1,17 +1,11 @@
 {
   "extends": ["tslint-react", "tslint-eslint-rules", "tslint-config-prettier"],
   "rules": {
-    "align": [true, "parameters", "statements"],
     "class-name": true,
-    "comment-format": [true, "check-space"],
-    "curly": true,
-    "object-curly-spacing": true,
     "eofline": true,
     "forin": true,
-    "indent": [true, "spaces"],
     "jsdoc-format": false,
     "label-position": true,
-    "max-line-length": [true, 120],
     "member-ordering": [
       true,
       {
@@ -43,18 +37,8 @@
     "no-var-keyword": true,
     "no-var-requires": false,
     "object-literal-sort-keys": false,
-    "one-line": [
-      true,
-      "check-catch",
-      "check-else",
-      "check-finally",
-      "check-open-brace",
-      "check-whitespace"
-    ],
     "one-variable-per-declaration": [true, "ignore-for-loop"],
-    "quotemark": [true, "single", "jsx-double"],
     "radix": true,
-    "semicolon": [true, "always"],
     "switch-default": true,
     "trailing-comma": [
       true,
@@ -91,18 +75,9 @@
       "check-format",
       "allow-pascal-case"
     ],
-    "whitespace": [
-      true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-separator",
-      "check-type",
-      "check-typecast"
-    ],
     "jsx-no-lambda": false,
     "jsx-no-string-ref": false,
     "jsx-boolean-value": [true, "never"],
-    "jsx-wrap-multiline": false
+    "jsx-no-multiline-js": false
   }
 }
