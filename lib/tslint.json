@@ -1,33 +1,17 @@
 {
-  "extends": [
-    "tslint-react",
-    "tslint-eslint-rules"
-  ],
+  "extends": ["tslint-react", "tslint-eslint-rules", "tslint-config-prettier"],
   "rules": {
-    "align": [
-      true,
-      "parameters",
-      "statements"
-    ],
+    "align": [true, "parameters", "statements"],
     "class-name": true,
-    "comment-format": [
-      true,
-      "check-space"
-    ],
+    "comment-format": [true, "check-space"],
     "curly": true,
     "object-curly-spacing": true,
     "eofline": true,
     "forin": true,
-    "indent": [
-      true,
-      "spaces"
-    ],
+    "indent": [true, "spaces"],
     "jsdoc-format": false,
     "label-position": true,
-    "max-line-length": [
-      true,
-      120
-    ],
+    "max-line-length": [true, 120],
     "member-ordering": [
       true,
       {
@@ -40,15 +24,7 @@
     "no-bitwise": true,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": true,
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "log",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+    "no-console": [true, "debug", "info", "log", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-constructor-vars": false,
     "no-debugger": true,
@@ -75,20 +51,10 @@
       "check-open-brace",
       "check-whitespace"
     ],
-    "one-variable-per-declaration": [
-      true,
-      "ignore-for-loop"
-    ],
-    "quotemark": [
-      true,
-      "single",
-      "jsx-double"
-    ],
+    "one-variable-per-declaration": [true, "ignore-for-loop"],
+    "quotemark": [true, "single", "jsx-double"],
     "radix": true,
-    "semicolon": [
-      true,
-      "always"
-    ],
+    "semicolon": [true, "always"],
     "switch-default": true,
     "trailing-comma": [
       true,
@@ -98,10 +64,7 @@
         "esSpecCompliant": true
       }
     ],
-    "triple-equals": [
-      true,
-      "allow-null-check"
-    ],
+    "triple-equals": [true, "allow-null-check"],
     "typedef": false,
     "typedef-whitespace": [
       true,
