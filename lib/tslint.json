@@ -1,54 +1,25 @@
 {
-  "extends": [
-    "tslint-react",
-    "tslint-eslint-rules"
-  ],
+  "extends": ["tslint-react", "tslint-eslint-rules", "tslint-config-prettier"],
   "rules": {
-    "align": [
-      true,
-      "parameters",
-      "statements"
-    ],
     "class-name": true,
-    "comment-format": [
-      true,
-      "check-space"
-    ],
-    "curly": true,
-    "object-curly-spacing": true,
     "eofline": true,
     "forin": true,
-    "indent": [
-      true,
-      "spaces"
-    ],
     "jsdoc-format": false,
     "label-position": true,
-    "max-line-length": [
-      true,
-      120
-    ],
     "member-ordering": [
       true,
       {
         "order": "statics-first"
       }
     ],
+    "strict-bound-class-methods": true,
     "new-parens": true,
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": true,
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "log",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+    "no-console": [true, "debug", "info", "log", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-constructor-vars": false,
     "no-debugger": true,
@@ -67,28 +38,8 @@
     "no-var-keyword": true,
     "no-var-requires": false,
     "object-literal-sort-keys": false,
-    "one-line": [
-      true,
-      "check-catch",
-      "check-else",
-      "check-finally",
-      "check-open-brace",
-      "check-whitespace"
-    ],
-    "one-variable-per-declaration": [
-      true,
-      "ignore-for-loop"
-    ],
-    "quotemark": [
-      true,
-      "single",
-      "jsx-double"
-    ],
+    "one-variable-per-declaration": [true, "ignore-for-loop"],
     "radix": true,
-    "semicolon": [
-      true,
-      "always"
-    ],
     "switch-default": true,
     "trailing-comma": [
       true,
@@ -98,10 +49,7 @@
         "esSpecCompliant": true
       }
     ],
-    "triple-equals": [
-      true,
-      "allow-null-check"
-    ],
+    "triple-equals": [true, "allow-null-check"],
     "typedef": false,
     "typedef-whitespace": [
       true,
@@ -128,18 +76,9 @@
       "check-format",
       "allow-pascal-case"
     ],
-    "whitespace": [
-      true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-separator",
-      "check-type",
-      "check-typecast"
-    ],
     "jsx-no-lambda": false,
     "jsx-no-string-ref": false,
     "jsx-boolean-value": [true, "never"],
-    "jsx-wrap-multiline": false
+    "jsx-no-multiline-js": false
   }
 }
