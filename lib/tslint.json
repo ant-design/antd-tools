@@ -12,6 +12,7 @@
         "order": "statics-first"
       }
     ],
+    "strict-bound-class-methods": true,
     "new-parens": true,
     "no-any": false,
     "no-arg": true,
