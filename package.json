@@ -64,7 +64,6 @@
     "merge2": "^1.2.0",
     "mini-css-extract-plugin": "^0.4.3",
     "minimist": "^1.2.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss": "^7.0.3",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.0.6",
