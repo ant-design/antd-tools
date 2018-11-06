@@ -58,7 +58,6 @@
     "jest": "^23.6.0",
     "jsonml.js": "^0.1.0",
     "less": "^3.8.1",
-    "less-plugin-clean-css": "^1.5.1",
     "less-plugin-npm-import": "^2.1.0",
     "mark-twain": "^2.0.2",
     "merge2": "^1.2.0",
