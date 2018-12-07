@@ -31,7 +31,7 @@
     "no-unused-expression": true,
     "no-var-keyword": true,
     "one-variable-per-declaration": [true, "ignore-for-loop"],
-    "prefer-const": [true, {"destructuring": "all"}],
+    "prefer-const": [true, { "destructuring": "all" }],
     "radix": true,
     "switch-default": true,
     "trailing-comma": [
