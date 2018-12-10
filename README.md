@@ -6,6 +6,13 @@
 
 Tools for Ant Design of React.
 
+## 6.1.0
+
+Pass `webpack` in `getWebpackConfig` for out usage
+
+## 6.0.0
+Support webpack 4 & babel 7
+
 ## 3.0.0
 
 Remove moment setting
