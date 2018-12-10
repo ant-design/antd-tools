@@ -24,7 +24,7 @@
     "pub": "git push origin && npm publish",
     "postinstall": "node lib/init.js",
     "lint": "eslint lib",
-    "prettier":"node ./script/prettier.js"
+    "prettier": "node ./script/prettier.js"
   },
   "dependencies": {
     "autoprefixer": "^7.1.4",
@@ -76,7 +76,8 @@
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.3.1",
     "tslint-react": "^3.6.0",
-    "webpack": "^3.6.0",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.0.0",
     "webpackbar": "^3.1.2"
   },
   "devDependencies": {
