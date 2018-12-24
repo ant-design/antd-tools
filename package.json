@@ -24,7 +24,8 @@
     "pub": "git push origin && npm publish",
     "postinstall": "node lib/init.js",
     "lint": "eslint lib",
-    "prettier": "node ./script/prettier.js"
+    "prettier": "node ./script/prettier.js",
+    "test": "jest"
   },
   "dependencies": {
     "@babel/core": "^7.2.0",
@@ -93,10 +94,11 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "eslint-config-prettier": "^3.3.0",
+    "jest": "^23.6.0",
     "pre-commit": "1.x"
   },
   "peerDependencies": {
