@@ -62,6 +62,7 @@
     "gulp-strip-code": "^0.1.4",
     "gulp-typescript": "^5.0.0",
     "gulp-watch": "^5.0.1",
+    "is-windows": "^1.0.2",
     "jsonml.js": "^0.1.0",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
