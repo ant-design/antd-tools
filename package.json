@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "7.3.4",
+  "version": "7.3.5",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -47,7 +47,6 @@
     "babel-core": "^7.0.0-0",
     "babel-jest": "^24.0.0",
     "babel-loader": "^8.0.4",
-    "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-import": "^1.11.0",
     "babel-plugin-inline-import-data-uri": "^1.0.1",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
