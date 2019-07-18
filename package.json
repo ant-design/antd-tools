@@ -1,6 +1,6 @@
 {
   "name": "antd-tools",
-  "version": "7.7.0",
+  "version": "7.7.1",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -58,6 +58,7 @@
     "glob": "^7.1.4",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
+    "gulp-sourcemaps": "^2.6.5",
     "gulp-strip-code": "^0.1.4",
     "gulp-typescript": "^5.0.1",
     "gulp-watch": "^5.0.1",
@@ -108,7 +109,6 @@
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "gulp-sourcemaps": "^2.6.5",
     "jest": "^24.8.0",
     "pre-commit": "1.x"
   },
