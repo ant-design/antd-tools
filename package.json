@@ -84,7 +84,7 @@
     "remark-parse": "^7.0.0",
     "remark-stringify": "^7.0.1",
     "remark-yaml-config": "^4.1.0",
-    "rimraf": "^2.6.3",
+    "rimraf": "^3.0.0",
     "rucksack-css": "^1.0.2",
     "through2": "^3.0.1",
     "ts-loader": "^6.0.2",
