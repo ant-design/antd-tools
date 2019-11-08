@@ -52,7 +52,7 @@
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chalk": "^2.4.2",
     "colorful": "^2.1.0",
-    "commander": "^3.0.0",
+    "commander": "^4.0.0",
     "css-loader": "^3.0.0",
     "gh-pages": "^2.0.1",
     "glob": "^7.1.4",
