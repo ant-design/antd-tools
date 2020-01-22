@@ -109,7 +109,7 @@
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
-    "jest": "^24.8.0",
+    "jest": "^25.1.0",
     "pre-commit": "1.x"
   },
   "peerDependencies": {
