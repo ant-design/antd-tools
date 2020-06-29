@@ -86,7 +86,7 @@
     "remark-yaml-config": "^4.1.0",
     "rimraf": "^3.0.0",
     "rucksack-css": "^1.0.2",
-    "through2": "^3.0.1",
+    "through2": "^4.0.1",
     "ts-loader": "^7.0.3",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
