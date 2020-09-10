@@ -99,7 +99,7 @@
     "url-loader": "^4.0.0",
     "webpack": "^4.34.0",
     "webpack-filter-warnings-plugin": "^1.2.1",
-    "webpack-merge": "^4.2.1",
+    "webpack-merge": "^5.1.4",
     "webpackbar": "^4.0.0"
   },
   "devDependencies": {
