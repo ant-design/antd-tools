@@ -78,7 +78,7 @@
     "object-assign": "~4.1.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss": "^7.0.17",
-    "postcss-loader": "^3.0.0",
+    "postcss-loader": "^4.0.4",
     "prettier": "^2.0.1",
     "progress": "^2.0.3",
     "remark-frontmatter": "^2.0.0",
