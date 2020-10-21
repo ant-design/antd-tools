@@ -87,7 +87,7 @@
     "remark-yaml-config": "^4.1.0",
     "rimraf": "^3.0.0",
     "through2": "^3.0.1",
-    "ts-loader": "^7.0.3",
+    "ts-loader": "^8.0.6",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
