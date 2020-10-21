@@ -66,7 +66,7 @@
     "is-windows": "^1.0.2",
     "jsonml.js": "^0.1.0",
     "less": "^3.9.0",
-    "less-loader": "^7.0.2",
+    "less-loader": "^6.0.0",
     "less-plugin-npm-import": "^2.1.0",
     "majo": "^0.9.1",
     "mark-twain": "^2.0.3",
