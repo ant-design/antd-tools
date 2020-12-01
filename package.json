@@ -43,7 +43,7 @@
     "@babel/plugin-transform-typescript": "^7.10.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
-    "ansi-styles": "^4.0.0",
+    "ansi-styles": "^5.0.0",
     "autoprefixer": "^10.0.1",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^26.0.1",
