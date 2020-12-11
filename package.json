@@ -21,7 +21,7 @@
     "antd-tools-run": "./bin/antd-tools-run.js"
   },
   "scripts": {
-    "pub": "git push origin && npm publish --access public",
+    "pub": "npm publish --access public",
     "postinstall": "node lib/init.js",
     "lint": "eslint lib",
     "prettier": "node ./script/prettier.js",
