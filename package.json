@@ -76,7 +76,6 @@
     "mkdirp": "^1.0.3",
     "node-fetch": "^2.6.0",
     "object-assign": "~4.1.1",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss": "^8.1.2",
     "postcss-loader": "^4.0.4",
     "prettier": "^2.0.1",
