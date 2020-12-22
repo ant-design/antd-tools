@@ -83,7 +83,7 @@
     "progress": "^2.0.3",
     "remark-frontmatter": "^2.0.0",
     "remark-parse": "^8.0.0",
-    "remark-stringify": "^8.0.0",
+    "remark-stringify": "^9.0.1",
     "remark-yaml-config": "^4.1.0",
     "rimraf": "^3.0.0",
     "through2": "^3.0.1",
