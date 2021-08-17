@@ -59,7 +59,6 @@
     "glob": "^7.1.4",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
-    "gulp-concat": "^2.6.1",
     "gulp-strip-code": "^0.1.4",
     "gulp-typescript": "^5.0.1",
     "gulp-watch": "^5.0.1",
