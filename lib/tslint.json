@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint-react", "tslint-eslint-rules", "tslint-config-prettier"],
+  "extends": ["tslint-react", "tslint-config-prettier"],
   "rules": {
     "class-name": true,
     "eofline": true,
