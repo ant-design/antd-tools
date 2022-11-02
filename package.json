@@ -17,8 +17,7 @@
   },
   "license": "MIT",
   "bin": {
-    "antd-tools": "./bin/antd-tools.js",
-    "antd-tools-run": "./bin/antd-tools-run.js"
+    "antd-tools": "./bin/antd-tools.js"
   },
   "scripts": {
     "pub": "git push origin && npm publish --access public",
