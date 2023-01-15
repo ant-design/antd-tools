@@ -1,6 +1,6 @@
 {
   "name": "@ant-design/tools",
-  "version": "17.0.0-alpha.7",
+  "version": "17.0.0",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -65,7 +65,7 @@
     "mini-css-extract-plugin": "^1.6.2",
     "minimist": "^1.2.0",
     "mkdirp": "^1.0.3",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "2.6.7",
     "object-assign": "~4.1.1",
     "postcss": "^8.1.2",
     "postcss-loader": "^4.0.4",
