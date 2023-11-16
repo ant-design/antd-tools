@@ -1,6 +1,6 @@
 {
   "name": "@ant-design/tools",
-  "version": "18.0.0-alpha.0",
+  "version": "18.0.0-alpha.1",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -88,7 +88,7 @@
     "webpack": "^5.0.0",
     "webpack-filter-warnings-plugin": "^1.2.1",
     "webpack-merge": "^4.2.1",
-    "webpackbar": "^4.0.0"
+    "webpackbar": "^5.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
