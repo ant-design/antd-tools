@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 
 const cwd: string = process.cwd();
@@ -36,10 +36,23 @@ export function injectRequire(): void {
   injected = true;
 }
 
-export function getConfig(): any {
+export interface AntdToolsConfig {
+  dist?: {
+    finalize?: VoidFunction;
+  };
+  bail?: boolean;
+  compile?: {
+    transformTSFile?: (file: File) => File | File[];
+    transformFile?: (file: File) => File | File[];
+  };
+  finalize?: VoidFunction;
+}
+
+export async function getConfig(): Promise<AntdToolsConfig> {
   const configPath: string = getProjectPath('.antd-tools.config.js');
   if (fs.existsSync(configPath)) {
-    return require(configPath);
+    const configModule = await import(configPath);
+    return configModule.default || configModule;
   }
 
   return {};
@@ -52,12 +65,13 @@ export function getConfig(): any {
  */
 export function isThereHaveBrowserslistConfig(): boolean {
   try {
-    const packageJson = require(getProjectPath('package.json'));
+    const packageJson = fs.readJsonSync(getProjectPath('package.json'));
     if (packageJson.browserslist) {
       return true;
     }
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   } catch (e) {
-    //
+    // DO NOTHING
   }
   if (fs.existsSync(getProjectPath('.browserslistrc'))) {
     return true;

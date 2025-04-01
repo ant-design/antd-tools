@@ -1,13 +1,11 @@
 import { getProjectPath, injectRequire, getConfig } from './utils/projectHelper';
 injectRequire();
 import merge2 from 'merge2';
-import { execSync } from 'child_process';
 import through2 from 'through2';
 import webpack from 'webpack';
 import babel from 'gulp-babel';
 import minimist from 'minimist';
 const argv = minimist(process.argv.slice(2));
-import chalk from 'chalk';
 import path from 'path';
 import watch from 'gulp-watch';
 import ts from 'gulp-typescript';
@@ -47,14 +45,14 @@ async function dist(done) {
   const configModule = await import(getProjectPath('webpack.config.js'));
   const webpackConfig = configModule.default || configModule;
 
-  webpack(webpackConfig, (err, stats) => {
+  webpack(webpackConfig, async (err, stats) => {
     if (err) {
       console.error(err.stack || err);
       return;
     }
 
     const info = stats.toJson();
-    const { dist: { finalize } = {}, bail } = getConfig();
+    const { dist: { finalize } = {}, bail } = await getConfig();
 
     if (stats.hasErrors()) {
       (info.errors || []).forEach(error => {
@@ -89,15 +87,6 @@ async function dist(done) {
 
     done(0);
   });
-}
-
-function tag() {
-  console.log('tagging');
-  const { version } = packageJson;
-  execSync(`git tag ${version}`);
-  execSync(`git push origin ${version}:${version}`);
-  execSync('git push origin master:master');
-  console.log('tagged');
 }
 
 gulp.task('clean', () => {
@@ -185,8 +174,8 @@ function insertUseClient() {
   });
 }
 
-function compile(modules?: boolean) {
-  const { compile: { transformTSFile, transformFile } = {} } = getConfig();
+async function compile(modules?: boolean) {
+  const { compile: { transformTSFile, transformFile } = {} } = await getConfig();
   rimraf.sync(modules !== false ? libDir : esDir);
 
   const assets = gulp
@@ -283,21 +272,6 @@ function generateLocale() {
   });
 }
 
-function publish(tagString, done) {
-  let args = ['publish', '--with-antd-tools', '--access=public'];
-  if (tagString) {
-    args = args.concat(['--tag', tagString]);
-  }
-  const publishNpm = process.env.PUBLISH_NPM_CLI || 'npm';
-  runCmd(publishNpm, args, code => {
-    console.log('Publish return code:', code);
-    if (!argv['skip-tag'] && !code) {
-      tag();
-    }
-    done(code);
-  });
-}
-
 // We use https://unpkg.com/[name]/?meta to check exist files
 gulp.task(
   'package-diff',
@@ -306,56 +280,22 @@ gulp.task(
   })
 );
 
-function pub(done) {
-  const notOk = !packageJson.version.match(/^\d+\.\d+\.\d+$/);
-  let tagString;
-
-  // Argument tag
-  if (argv['npm-tag']) {
-    tagString = argv['npm-tag'];
-  }
-
-  // Config tag
-  if (!tagString) {
-    const { tag: configTag } = getConfig();
-    if (configTag) {
-      tagString = configTag;
-    }
-  }
-
-  // Auto next tag
-  if (!tagString && notOk) {
-    tagString = 'next';
-  }
-  if (packageJson.scripts['pre-publish'] && !argv['skip-pre-publish']) {
-    runCmd('npm', ['run', 'pre-publish'], code2 => {
-      if (code2) {
-        done(code2);
-        return;
-      }
-      publish(tagString, done);
-    });
-  } else {
-    publish(tagString, done);
-  }
-}
-
-gulp.task('compile-with-es', done => {
+gulp.task('compile-with-es', async done => {
   console.log('[Parallel] Compile to es...');
-  compile(false).on('finish', done);
+  (await compile(false)).on('finish', done);
 });
 
-gulp.task('compile-with-lib', done => {
+gulp.task('compile-with-lib', async done => {
   console.log('[Parallel] Compile to js...');
-  compile().on('finish', () => {
+  (await compile()).on('finish', () => {
     generateLocale();
     done();
   });
 });
 
-gulp.task('compile-finalize', done => {
+gulp.task('compile-finalize', async done => {
   // Additional process of compile finalize
-  const { compile: { finalize } = {} } = getConfig();
+  const { compile: { finalize } = {} } = await getConfig();
   if (finalize) {
     console.log('[Compile] Finalization...');
     finalize();
@@ -372,13 +312,6 @@ gulp.task(
   'install',
   gulp.series(done => {
     install(done);
-  })
-);
-
-gulp.task(
-  'pub',
-  gulp.series('check-git', 'compile', 'dist', 'package-diff', done => {
-    pub(done);
   })
 );
 
