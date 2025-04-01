@@ -1,24 +1,21 @@
 #!/usr/bin/env node
 
-'use strict';
+import chalk from 'chalk';
+import gulp from 'gulp';
+import minimist from 'minimist';
 
-const chalk = require('chalk');
-const gulp = require('gulp');
-
-const argv = require('minimist')(process.argv.slice(2));
-
+const argv = minimist(process.argv.slice(2)) as { _: string[]; [key: string]: any };
 const cloneArgs = { ...argv };
 delete cloneArgs._;
 
 console.log(chalk.yellow('Execute:'), chalk.green(argv._[1]), '-', JSON.stringify(cloneArgs));
 console.log('  - Args:', JSON.stringify(cloneArgs));
 
-require('../gulpfile');
+import '../gulpfile';
 
-// Start glup task
-function runTask(toRun) {
-  const metadata = { task: toRun };
-  // Gulp >= 4.0.0 (doesn't support events)
+// Start gulp task
+function runTask(toRun: string): void {
+  const metadata: { task: string; hrDuration?: [number, number] } = { task: toRun };
   const taskInstance = gulp.task(toRun);
   if (taskInstance === undefined) {
     gulp.emit('task_not_found', metadata);
@@ -31,7 +28,7 @@ function runTask(toRun) {
     metadata.hrDuration = process.hrtime(start);
     gulp.emit('task_stop', metadata);
     gulp.emit('stop');
-  } catch (err) {
+  } catch (err: any) {
     err.hrDuration = process.hrtime(start);
     err.task = metadata.task;
     gulp.emit('task_err', err);
