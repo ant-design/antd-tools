@@ -1,5 +1,4 @@
-import { getProjectPath, injectRequire, getConfig } from './utils/projectHelper';
-injectRequire();
+import { getProjectPath, getConfig } from './utils/projectHelper';
 import merge2 from 'merge2';
 import through2 from 'through2';
 import webpack from 'webpack';

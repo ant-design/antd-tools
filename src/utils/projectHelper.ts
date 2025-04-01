@@ -11,31 +11,6 @@ export function resolve(moduleName: string): string {
   return require.resolve(moduleName);
 }
 
-// We need hack the require to ensure use package module first
-// For example, `typescript` is required by `gulp-typescript` but provided by `antd`
-let injected: boolean = false;
-export function injectRequire(): void {
-  if (injected) return;
-
-  const Module = require('module');
-
-  const oriRequire = Module.prototype.require;
-  Module.prototype.require = function (...args: any[]): any {
-    const moduleName: string = args[0];
-    try {
-      return oriRequire.apply(this, args);
-    } catch (err) {
-      const newArgs = [...args];
-      if (moduleName[0] !== '/') {
-        newArgs[0] = getProjectPath('node_modules', moduleName);
-      }
-      return oriRequire.apply(this, newArgs);
-    }
-  };
-
-  injected = true;
-}
-
 export interface AntdToolsConfig {
   dist?: {
     finalize?: VoidFunction;
@@ -44,8 +19,8 @@ export interface AntdToolsConfig {
   compile?: {
     transformTSFile?: (file: File) => File | File[];
     transformFile?: (file: File) => File | File[];
+    finalize?: VoidFunction;
   };
-  finalize?: VoidFunction;
 }
 
 export async function getConfig(): Promise<AntdToolsConfig> {

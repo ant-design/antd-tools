@@ -1,6 +1,4 @@
-const { getProjectPath, resolve, injectRequire } = require('./utils/projectHelper'); // eslint-disable-line import/order
-
-injectRequire();
+const { getProjectPath, resolve } = require('./utils/projectHelper'); // eslint-disable-line import/order
 
 // Show warning for webpack
 process.traceDeprecation = true;
