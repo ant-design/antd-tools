@@ -13,7 +13,7 @@ import watch from 'gulp-watch';
 import ts from 'gulp-typescript';
 import gulp from 'gulp';
 import glob from 'glob';
-import fs from 'fs';
+import fs from 'fs-extra';
 import rimraf from 'rimraf';
 import install from './install';
 import runCmd from './runCmd';
@@ -22,13 +22,14 @@ import getNpm from './getNpm';
 import selfPackage from '../package.json';
 import getNpmArgs from './utils/get-npm-args';
 import getTSCommonConfig from './getTSCommonConfig';
-const tsConfig = getTSCommonConfig();
 import replaceLib from './replaceLib';
 import checkDiff from './lint/checkDiff';
 import apiCollection from './apiCollection';
 import sortApiTable from './sortApiTable';
 
-const packageJson = require(getProjectPath('package.json'));
+const tsConfig = getTSCommonConfig();
+
+const packageJson = fs.readJsonSync(getProjectPath('package.json'));
 
 const tsDefaultReporter = ts.reporter.defaultReporter();
 const cwd = process.cwd();

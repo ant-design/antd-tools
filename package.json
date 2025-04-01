@@ -51,6 +51,7 @@
     "commander": "^6.1.0",
     "css-loader": "^5.0.0",
     "css-minimizer-webpack-plugin": "^1.1.5",
+    "fs-extra": "^11.3.0",
     "gh-pages": "^3.0.0",
     "glob": "^7.1.4",
     "gulp": "^4.0.2",
@@ -95,6 +96,7 @@
   },
   "devDependencies": {
     "@rc-component/father-plugin": "^2.1.2",
+    "@types/fs-extra": "^11.0.4",
     "@types/glob": "^8.1.0",
     "@types/gulp": "^4.0.17",
     "@types/gulp-babel": "^6.1.33",

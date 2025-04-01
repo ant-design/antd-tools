@@ -1,27 +1,27 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const cwd = process.cwd();
+const cwd: string = process.cwd();
 
-function getProjectPath(...filePath) {
+export function getProjectPath(...filePath: string[]): string {
   return path.join(cwd, ...filePath);
 }
 
-function resolve(moduleName) {
+export function resolve(moduleName: string): string {
   return require.resolve(moduleName);
 }
 
 // We need hack the require to ensure use package module first
 // For example, `typescript` is required by `gulp-typescript` but provided by `antd`
-let injected = false;
-function injectRequire() {
+let injected: boolean = false;
+export function injectRequire(): void {
   if (injected) return;
 
   const Module = require('module');
 
   const oriRequire = Module.prototype.require;
-  Module.prototype.require = function (...args) {
-    const moduleName = args[0];
+  Module.prototype.require = function (...args: any[]): any {
+    const moduleName: string = args[0];
     try {
       return oriRequire.apply(this, args);
     } catch (err) {
@@ -36,8 +36,8 @@ function injectRequire() {
   injected = true;
 }
 
-function getConfig() {
-  const configPath = getProjectPath('.antd-tools.config.js');
+export function getConfig(): any {
+  const configPath: string = getProjectPath('.antd-tools.config.js');
   if (fs.existsSync(configPath)) {
     return require(configPath);
   }
@@ -46,11 +46,11 @@ function getConfig() {
 }
 
 /**
- * 是否存在可用的browserslist config
+ * 是否存在可用的 browserslist 配置
  * https://github.com/browserslist/browserslist#queries
  * @returns
  */
-function isThereHaveBrowserslistConfig() {
+export function isThereHaveBrowserslistConfig(): boolean {
   try {
     const packageJson = require(getProjectPath('package.json'));
     if (packageJson.browserslist) {
@@ -65,15 +65,7 @@ function isThereHaveBrowserslistConfig() {
   if (fs.existsSync(getProjectPath('browserslist'))) {
     return true;
   }
-  // parent项目的配置支持，需要再补充
+  // parent 项目的配置支持，需要再补充
   // ROWSERSLIST ROWSERSLIST_ENV 变量的形式，需要再补充。
   return false;
 }
-
-module.exports = {
-  getProjectPath,
-  resolve,
-  injectRequire,
-  getConfig,
-  isThereHaveBrowserslistConfig,
-};
