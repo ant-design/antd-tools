@@ -25,7 +25,6 @@
   "scripts": {
     "compile": "father build",
     "pub": "git push origin && npm publish --access public",
-    "postinstall": "node lib/init.js",
     "lint": "eslint src",
     "prettier": "node ./script/prettier.js",
     "test": "jest && npm run lint"
@@ -56,7 +55,6 @@
     "glob": "^7.1.4",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
-    "gulp-strip-code": "^0.1.4",
     "gulp-typescript": "^5.0.1",
     "gulp-watch": "^5.0.1",
     "is-windows": "^1.0.2",
@@ -108,7 +106,7 @@
     "@typescript-eslint/eslint-plugin": "^8.29.0",
     "@typescript-eslint/parser": "^8.29.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^7.2.0",
+    "eslint": "^8.0.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.17.3",
@@ -121,5 +119,6 @@
   "pre-commit": [
     "lint",
     "prettier"
-  ]
+  ],
+  "__npminstall_done": false
 }

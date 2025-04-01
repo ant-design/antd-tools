@@ -15,7 +15,6 @@ import gulp from 'gulp';
 import glob from 'glob';
 import fs from 'fs';
 import rimraf from 'rimraf';
-import stripCode from 'gulp-strip-code';
 import install from './install';
 import runCmd from './runCmd';
 import getBabelCommonConfig from './getBabelCommonConfig';
@@ -25,7 +24,6 @@ import getNpmArgs from './utils/get-npm-args';
 import getTSCommonConfig from './getTSCommonConfig';
 const tsConfig = getTSCommonConfig();
 import replaceLib from './replaceLib';
-import checkDeps from './lint/checkDeps';
 import checkDiff from './lint/checkDiff';
 import apiCollection from './apiCollection';
 import sortApiTable from './sortApiTable';
@@ -50,9 +48,6 @@ function dist(done) {
   webpack(webpackConfig, (err, stats) => {
     if (err) {
       console.error(err.stack || err);
-      if (err.details) {
-        console.error(err.details);
-      }
       return;
     }
 
@@ -103,23 +98,6 @@ function tag() {
   console.log('tagged');
 }
 
-gulp.task(
-  'check-git',
-  gulp.series(done => {
-    runCmd('git', ['status', '--porcelain'], (code, result) => {
-      if (/^\?\?/m.test(result)) {
-        return done(`There are untracked files in the working tree.\n${result}
-      `);
-      }
-      if (/^([ADRM]| [ADRM])/m.test(result)) {
-        return done(`There are uncommitted changes in the working tree.\n${result}
-      `);
-      }
-      return done();
-    });
-  })
-);
-
 gulp.task('clean', () => {
   rimraf.sync(getProjectPath('_site'));
   rimraf.sync(getProjectPath('_data'));
@@ -129,13 +107,6 @@ gulp.task(
   'dist',
   gulp.series(done => {
     dist(done);
-  })
-);
-
-gulp.task(
-  'deps-lint',
-  gulp.series(done => {
-    checkDeps(done);
   })
 );
 
@@ -255,14 +226,6 @@ function compile(modules) {
 
   // Strip content if needed
   let sourceStream = gulp.src(source);
-  if (modules === false) {
-    sourceStream = sourceStream.pipe(
-      stripCode({
-        start_comment: '@remove-on-es-build-begin',
-        end_comment: '@remove-on-es-build-end',
-      })
-    );
-  }
 
   if (transformTSFile) {
     sourceStream = sourceStream.pipe(
