@@ -3,6 +3,7 @@
     "resolveJsonModule": true,
     "target": "esnext",
     "moduleResolution": "node",
+    "module": "esnext",
     "baseUrl": "./",
     "jsx": "preserve",
     "declaration": true,

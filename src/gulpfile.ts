@@ -20,7 +20,6 @@ import runCmd from './runCmd';
 import getBabelCommonConfig from './getBabelCommonConfig';
 import getNpm from './getNpm';
 import selfPackage from '../package.json';
-import getNpmArgs from './utils/get-npm-args';
 import getTSCommonConfig from './getTSCommonConfig';
 import replaceLib from './replaceLib';
 import checkDiff from './lint/checkDiff';
@@ -42,10 +41,12 @@ const localeDts = `import type { Locale } from '../lib/locale';
 declare const localeValues: Locale;
 export default localeValues;`;
 
-function dist(done) {
+async function dist(done) {
   rimraf.sync(getProjectPath('dist'));
   process.env.RUN_ENV = 'PRODUCTION';
-  const webpackConfig = require(getProjectPath('webpack.config.js'));
+  const configModule = await import(getProjectPath('webpack.config.js'));
+  const webpackConfig = configModule.default || configModule;
+
   webpack(webpackConfig, (err, stats) => {
     if (err) {
       console.error(err.stack || err);
@@ -184,7 +185,7 @@ function insertUseClient() {
   });
 }
 
-function compile(modules) {
+function compile(modules?: boolean) {
   const { compile: { transformTSFile, transformFile } = {} } = getConfig();
   rimraf.sync(modules !== false ? libDir : esDir);
 
@@ -244,7 +245,7 @@ function compile(modules) {
   const tsResult = sourceStream.pipe(
     ts(tsConfig, {
       error(e) {
-        tsDefaultReporter.error(e);
+        tsDefaultReporter.error(e, undefined);
         error = 1;
       },
       finish: tsDefaultReporter.finish,
@@ -391,34 +392,6 @@ gulp.task(
         done(c);
       });
     });
-  })
-);
-
-gulp.task(
-  'guard',
-  gulp.series(done => {
-    function reportError() {
-      console.log(chalk.bgRed('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'));
-      console.log(chalk.bgRed('!! `npm publish` is forbidden for this package. !!'));
-      console.log(chalk.bgRed('!! Use `npm run pub` instead.                   !!'));
-      console.log(chalk.bgRed('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'));
-    }
-    const npmArgs = getNpmArgs();
-    if (npmArgs) {
-      for (let arg = npmArgs.shift(); arg; arg = npmArgs.shift()) {
-        if (
-          /^pu(b(l(i(sh?)?)?)?)?$/.test(arg) &&
-          npmArgs.indexOf('--with-antd-tools') < 0 &&
-          !process.env.npm_config_with_antd_tools
-        ) {
-          reportError();
-          done(1);
-          process.exit(1);
-          return;
-        }
-      }
-    }
-    done();
   })
 );
 
