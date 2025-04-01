@@ -1,34 +1,34 @@
-const { getProjectPath, injectRequire, getConfig } = require('./utils/projectHelper'); // eslint-disable-line import/order
-
+import { getProjectPath, injectRequire, getConfig } from './utils/projectHelper';
 injectRequire();
-
-const merge2 = require('merge2');
-const { execSync } = require('child_process');
-const through2 = require('through2');
-const webpack = require('webpack');
-const babel = require('gulp-babel');
-const argv = require('minimist')(process.argv.slice(2));
-const chalk = require('chalk');
-const path = require('path');
-const watch = require('gulp-watch');
-const ts = require('gulp-typescript');
-const gulp = require('gulp');
-const glob = require('glob');
-const fs = require('fs');
-const rimraf = require('rimraf');
-const stripCode = require('gulp-strip-code');
-const install = require('./install');
-const runCmd = require('./runCmd');
-const getBabelCommonConfig = require('./getBabelCommonConfig');
-const getNpm = require('./getNpm');
-const selfPackage = require('../package.json');
-const getNpmArgs = require('./utils/get-npm-args');
-const tsConfig = require('./getTSCommonConfig')();
-const replaceLib = require('./replaceLib');
-const checkDeps = require('./lint/checkDeps');
-const checkDiff = require('./lint/checkDiff');
-const apiCollection = require('./apiCollection');
-const sortApiTable = require('./sortApiTable');
+import merge2 from 'merge2';
+import { execSync } from 'child_process';
+import through2 from 'through2';
+import webpack from 'webpack';
+import babel from 'gulp-babel';
+import minimist from 'minimist';
+const argv = minimist(process.argv.slice(2));
+import chalk from 'chalk';
+import path from 'path';
+import watch from 'gulp-watch';
+import ts from 'gulp-typescript';
+import gulp from 'gulp';
+import glob from 'glob';
+import fs from 'fs';
+import rimraf from 'rimraf';
+import stripCode from 'gulp-strip-code';
+import install from './install';
+import runCmd from './runCmd';
+import getBabelCommonConfig from './getBabelCommonConfig';
+import getNpm from './getNpm';
+import selfPackage from '../package.json';
+import getNpmArgs from './utils/get-npm-args';
+import getTSCommonConfig from './getTSCommonConfig';
+const tsConfig = getTSCommonConfig();
+import replaceLib from './replaceLib';
+import checkDeps from './lint/checkDeps';
+import checkDiff from './lint/checkDiff';
+import apiCollection from './apiCollection';
+import sortApiTable from './sortApiTable';
 
 const packageJson = require(getProjectPath('package.json'));
 

@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import gulp from 'gulp';
 import minimist from 'minimist';
 
-const argv = minimist(process.argv.slice(2)) as { _: string[]; [key: string]: any };
+const argv = minimist(process.argv.slice(2));
 const cloneArgs = { ...argv };
 delete cloneArgs._;
 
