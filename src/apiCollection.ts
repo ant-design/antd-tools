@@ -1,14 +1,12 @@
-// Read all the api from current documents
-
-const glob = require('glob');
-const fs = require('fs');
+import glob from 'glob';
+import fs from 'fs';
 
 const COMPONENT_NAME = /components\/([^/]*)/;
 const PROP_NAME = /^\s*\|\s*([^\s|]*)/;
 
-const components = {};
+const components: { [key: string]: string[] } = {};
 
-function mappingPropLine(component, line) {
+function mappingPropLine(component: string, line: string): void {
   const propMatch = line.match(PROP_NAME);
   if (!propMatch) return;
 
@@ -18,8 +16,8 @@ function mappingPropLine(component, line) {
   components[component] = Array.from(new Set([...(components[component] || []), propName]));
 }
 
-function apiReport(entities) {
-  const apis = {};
+function apiReport(entities: { [key: string]: string[] }): { [key: string]: string[] } {
+  const apis: { [key: string]: string[] } = {};
   Object.keys(entities).forEach(component => {
     const apiList = entities[component];
     apiList.forEach(api => {
@@ -33,30 +31,27 @@ function apiReport(entities) {
   return apis;
 }
 
-function printReport(apis) {
+function printReport(apis: { [key: string]: string[] }): void {
   const apiList = Object.keys(apis).map(api => ({
     name: api,
     componentList: apis[api],
   }));
   apiList.sort((a, b) => b.componentList.length - a.componentList.length);
-  // eslint-disable-next-line no-console
   console.log('| name | components | comments |');
-  // eslint-disable-next-line no-console
   console.log('| ---- | ---------- | -------- |');
   apiList.forEach(({ name, componentList }) => {
-    // eslint-disable-next-line no-console
     console.log('|', name, '|', componentList.join(', '), '| |');
   });
 }
 
-module.exports = () => {
-  glob('components/*/*.md', (error, files) => {
+export default (): void => {
+  glob('components/*/*.md', (error: Error | null, files: string[]) => {
     files.forEach(filePath => {
-      // Read md file to parse content
       const content = fs.readFileSync(filePath, 'utf8');
-      const component = filePath.match(COMPONENT_NAME)[1];
+      const match = filePath.match(COMPONENT_NAME);
+      if (!match) return;
+      const component = match[1];
 
-      // Parse lines to get API
       const lines = content.split(/[\r\n]+/);
       lines.forEach(line => {
         mappingPropLine(component, line);
