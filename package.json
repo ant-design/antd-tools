@@ -19,12 +19,18 @@
   "bin": {
     "antd-tools": "./bin/antd-tools.js"
   },
+  "files": [
+    "es",
+    "lib",
+    "script",
+    "bin"
+  ],
   "main": "./lib/index",
   "module": "./es/index",
   "types": "./lib/index.d.ts",
   "scripts": {
     "compile": "father build",
-    "pub": "git push origin && npm publish --access public",
+    "prepublishOnly": "npm run compile",
     "lint": "eslint src",
     "prettier": "node ./script/prettier.js",
     "test": "jest && npm run lint"
