@@ -1,18 +1,21 @@
-const { getProjectPath, resolve } = require('./utils/projectHelper'); // eslint-disable-line import/order
+import { getProjectPath, resolve } from './utils/projectHelper';
+import * as path from 'path';
+import * as webpack from 'webpack';
+import WebpackBar from 'webpackbar';
+import { merge } from 'webpack-merge';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import CleanUpStatsPlugin from './utils/CleanUpStatsPlugin';
+import { Configuration } from 'webpack';
+import { readJsonSync } from 'fs-extra';
+import getBabelCommonConfig from './getBabelCommonConfig';
 
-// Show warning for webpack
-process.traceDeprecation = true;
-
-// Normal requirement
-const path = require('path');
-const webpack = require('webpack');
-const WebpackBar = require('webpackbar');
-const webpackMerge = require('webpack-merge');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const CleanUpStatsPlugin = require('./utils/CleanUpStatsPlugin');
+interface PackageJson {
+  name: string;
+  version: string;
+}
 
 const svgRegex = /\.svg(\?v=\d+\.\d+\.\d+)?$/;
 const svgOptions = {
@@ -24,11 +27,18 @@ const imageOptions = {
   limit: 10000,
 };
 
-function getWebpackConfig(modules) {
-  const pkg = require(getProjectPath('package.json'));
-  const babelConfig = require('./getBabelCommonConfig')(modules || false);
+interface GetWebpackConfigFunction {
+  (modules?: boolean): Configuration[];
+  webpack: typeof webpack;
+  svgRegex: RegExp;
+  svgOptions: typeof svgOptions;
+  imageOptions: typeof imageOptions;
+}
 
-  // babel import for components
+const getWebpackConfig: GetWebpackConfigFunction = (modules?: boolean): Configuration[] => {
+  const pkg: PackageJson = readJsonSync(getProjectPath('package.json'));
+  const babelConfig = getBabelCommonConfig(modules || false);
+
   babelConfig.plugins.push([
     resolve('babel-plugin-import'),
     {
@@ -38,7 +48,6 @@ function getWebpackConfig(modules) {
     },
   ]);
 
-  // Other package
   if (pkg.name !== 'antd') {
     babelConfig.plugins.push([
       resolve('babel-plugin-import'),
@@ -55,7 +64,7 @@ function getWebpackConfig(modules) {
     babelConfig.plugins.push(require.resolve('./replaceLib'));
   }
 
-  const config = {
+  const config: Configuration = {
     devtool: 'source-map',
 
     output: {
@@ -144,8 +153,6 @@ function getWebpackConfig(modules) {
             },
           ],
         },
-
-        // Images
         {
           test: svgRegex,
           loader: resolve('url-loader'),
@@ -188,7 +195,6 @@ All rights reserved.
   if (process.env.RUN_ENV === 'PRODUCTION') {
     const entry = ['./index'];
 
-    // Common config
     config.externals = {
       react: {
         root: 'React',
@@ -218,8 +224,7 @@ All rights reserved.
       ],
     };
 
-    // Development
-    const uncompressedConfig = webpackMerge({}, config, {
+    const uncompressedConfig = merge({}, config, {
       entry: {
         [pkg.name]: entry,
       },
@@ -232,8 +237,7 @@ All rights reserved.
       ],
     });
 
-    // Production
-    const prodConfig = webpackMerge({}, config, {
+    const prodConfig = merge({}, config, {
       entry: {
         [`${pkg.name}.min`]: entry,
       },
@@ -256,11 +260,11 @@ All rights reserved.
   }
 
   return [config];
-}
+};
 
 getWebpackConfig.webpack = webpack;
 getWebpackConfig.svgRegex = svgRegex;
 getWebpackConfig.svgOptions = svgOptions;
 getWebpackConfig.imageOptions = imageOptions;
 
-module.exports = getWebpackConfig;
+export default getWebpackConfig;
