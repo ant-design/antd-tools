@@ -214,7 +214,9 @@ All rights reserved.
     config.output.globalObject = 'this';
     config.optimization = {
       minimizer: [
-        new TerserPlugin({
+        new TerserPlugin<{
+          warnings: boolean;
+        }>({
           parallel: true,
           minify: TerserPlugin.uglifyJsMinify,
           terserOptions: {
