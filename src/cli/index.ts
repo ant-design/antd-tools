@@ -8,8 +8,13 @@ const argv = minimist(process.argv.slice(2));
 const cloneArgs = { ...argv };
 delete cloneArgs._;
 
-console.log(chalk.yellow('Execute:'), chalk.green(argv._[1]), '-', JSON.stringify(cloneArgs));
-console.log('  - Args:', JSON.stringify(cloneArgs));
+console.log(
+  chalk.yellow('[@ant-design/tools]'),
+  chalk.green('Execute:'),
+  argv._[1],
+  '-',
+  JSON.stringify(cloneArgs)
+);
 
 import '../gulpfile';
 
