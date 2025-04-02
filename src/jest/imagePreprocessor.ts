@@ -8,7 +8,7 @@ interface LoaderContext {
   query?: Record<string, unknown>;
 }
 
-export function process(src: string, filename: string): { code: string } {
+function process(src: string, filename: string): { code: string } {
   const instance: LoaderContext = { resourcePath: filename };
   if (svgRegex.test(filename)) {
     instance.query = svgOptions;
@@ -18,3 +18,7 @@ export function process(src: string, filename: string): { code: string } {
   const result = urlLoader.call(instance, src);
   return { code: result };
 }
+
+export default {
+  process,
+};
