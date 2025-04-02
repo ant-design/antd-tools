@@ -15,9 +15,6 @@ interface Node {
   children?: Node[];
   value?: string;
 }
-interface Root {
-  children: Node[];
-}
 interface Context {
   files: Record<string, unknown>;
   fileContents(filename: string): string;
@@ -113,7 +110,7 @@ function sizeSort(nodes: Node[]): Node[] {
   );
 }
 
-function sort(ast: Root, filename: string): Root {
+function sort(ast: Node, filename: string): Node {
   const nameMatch = filename.match(/^components\/([^/]*)\//);
   const componentName = nameMatch ? nameMatch[1] : 'unknown';
   fileAPIs[componentName] = fileAPIs[componentName] || {
@@ -162,7 +159,7 @@ function sort(ast: Root, filename: string): Root {
 }
 
 function sortAPI(md: string, filename: string): string {
-  const ast = remarkWithYaml.parse(md) as Root;
+  const ast = remarkWithYaml.parse(md);
   const sortedAst = sort(ast, filename);
   return remarkWithYaml.stringify(sortedAst);
 }
