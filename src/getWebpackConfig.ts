@@ -2,7 +2,7 @@ import { getProjectPath, resolve } from './utils/projectHelper';
 import * as path from 'path';
 import * as webpack from 'webpack';
 import WebpackBar from 'webpackbar';
-import { merge } from 'webpack-merge';
+import webpackMerge from 'webpack-merge';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
@@ -226,7 +226,7 @@ All rights reserved.
       ],
     };
 
-    const uncompressedConfig = merge({}, config, {
+    const uncompressedConfig = webpackMerge({}, config, {
       entry: {
         [pkg.name]: entry,
       },
@@ -239,7 +239,7 @@ All rights reserved.
       ],
     });
 
-    const prodConfig = merge({}, config, {
+    const prodConfig = webpackMerge({}, config, {
       entry: {
         [`${pkg.name}.min`]: entry,
       },
