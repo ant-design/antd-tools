@@ -4,7 +4,6 @@ import through2 from 'through2';
 import webpack from 'webpack';
 import babel from 'gulp-babel';
 import minimist from 'minimist';
-const argv = minimist(process.argv.slice(2));
 import path from 'path';
 import watch from 'gulp-watch';
 import ts from 'gulp-typescript';
@@ -12,16 +11,14 @@ import gulp from 'gulp';
 import glob from 'glob';
 import fs from 'fs-extra';
 import rimraf from 'rimraf';
-import install from './install';
-import runCmd from './runCmd';
 import getBabelCommonConfig from './getBabelCommonConfig';
-import getNpm from './getNpm';
-import selfPackage from '../package.json';
 import getTSCommonConfig from './getTSCommonConfig';
 import replaceLib from './replaceLib';
 import checkDiff from './lint/checkDiff';
 import apiCollection from './apiCollection';
 import sortApiTable from './sortApiTable';
+
+const argv = minimist(process.argv.slice(2));
 
 const tsConfig = getTSCommonConfig();
 
@@ -305,26 +302,6 @@ gulp.task('compile-finalize', async done => {
 gulp.task(
   'compile',
   gulp.series(gulp.parallel('compile-with-es', 'compile-with-lib'), 'compile-finalize')
-);
-
-gulp.task(
-  'install',
-  gulp.series(done => {
-    install(done);
-  })
-);
-
-gulp.task(
-  'update-self',
-  gulp.series(done => {
-    getNpm(npm => {
-      console.log(`${npm} updating ${selfPackage.name}`);
-      runCmd(npm, ['update', selfPackage.name], c => {
-        console.log(`${npm} update ${selfPackage.name} end`);
-        done(c);
-      });
-    });
-  })
 );
 
 gulp.task(
