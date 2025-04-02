@@ -2,7 +2,9 @@ import { resolve, isThereHaveBrowserslistConfig } from './utils/projectHelper';
 import fs from 'fs-extra';
 import type { TransformOptions } from '@babel/core';
 
-export default function getBabelCommonConfig(modules: boolean): TransformOptions {
+export default function getBabelCommonConfig(modules: boolean): TransformOptions & {
+  cacheDirectory?: boolean;
+} {
   const plugins = [
     [
       resolve('@babel/plugin-transform-typescript'),

@@ -149,7 +149,7 @@ function babelify(js, modules) {
   if (modules === false) {
     babelConfig.plugins.push(replaceLib);
   }
-  const stream = js.pipe(babel(babelConfig));
+  const stream = js.pipe(babel(babelConfig as Parameters<typeof babel>[0]));
   return stream.pipe(gulp.dest(modules === false ? esDir : libDir));
 }
 

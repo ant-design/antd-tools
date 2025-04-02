@@ -1,12 +1,20 @@
-const { getProjectPath } = require('../utils/projectHelper'); // eslint-disable-line import/order
+import { getProjectPath } from '../utils/projectHelper';
+import fs from 'fs';
+import { join } from 'path';
+import chalk from 'chalk';
+import fetch from 'node-fetch';
+import readline from 'readline';
+import minimist from 'minimist';
 
-const fs = require('fs');
-const { join } = require('path');
-const chalk = require('chalk');
-const fetch = require('node-fetch');
-const readline = require('readline');
+const argv = minimist(process.argv.slice(2));
 
-function getMajorVersion(version, specificVersion) {
+// Added interface to replace "any"
+interface FileItem {
+  path: string;
+  files?: FileItem[];
+}
+
+function getMajorVersion(version: string, specificVersion?: string): string {
   if (specificVersion) {
     return `@${specificVersion}`;
   }
@@ -20,25 +28,26 @@ function getMajorVersion(version, specificVersion) {
   return '';
 }
 
-function getVersionFromURL(url, name) {
+function getVersionFromURL(url: string, name: string): string {
   const affix = url.slice(url.indexOf(name) + name.length + 1);
   return affix.slice(0, affix.indexOf('/'));
 }
 
-const argv = require('minimist')(process.argv.slice(2));
-
-module.exports = function (packageName, packageVersion, done) {
+export default function (
+  packageName: string,
+  packageVersion: string,
+  done: (err?: Error) => void
+): void {
   const mergedVersion = getMajorVersion(packageVersion, argv.version);
   console.log(chalk.cyan(`Fetching latest version file list...${packageName}${mergedVersion}`));
 
   fetch(`https://unpkg.com/${packageName}${mergedVersion}/?meta`)
     .then(res => {
       const version = getVersionFromURL(res.url, packageName);
-      return res.json().then(json => ({ version, ...json }));
+      return res.json().then((json: object) => ({ version, ...json }));
     })
-    .then(({ version, files: pkgFiles }) => {
-      // Loop all the exist files
-      function flattenPath(files, fileList = []) {
+    .then(({ version, files: pkgFiles }: { version: string; files: FileItem[] }) => {
+      function flattenPath(files: FileItem[], fileList: string[] = []): string[] {
         (files || []).forEach(({ path, files: subFiles }) => {
           fileList.push(path);
           flattenPath(subFiles, fileList);
@@ -48,7 +57,6 @@ module.exports = function (packageName, packageVersion, done) {
       return { version, fileList: flattenPath(pkgFiles) };
     })
     .then(({ version, fileList }) => {
-      // Find missing files
       const missingFiles = fileList.filter(filePath => {
         const concatFilePath = argv.path ? join(argv.path, filePath) : filePath;
 
@@ -62,7 +70,7 @@ module.exports = function (packageName, packageVersion, done) {
         missingFiles.forEach(filePath => {
           console.log(` - ${filePath}`);
         });
-        return Promise.reject('Please double confirm with files.'); // eslint-disable-line prefer-promise-reject-errors
+        return Promise.reject('Please double confirm with files.');
       }
 
       console.log(
@@ -71,12 +79,12 @@ module.exports = function (packageName, packageVersion, done) {
       );
       return 0;
     })
-    .then(done)
+    .then(() => done())
     .catch(err => {
       console.error(err);
       console.log(chalk.yellow('\nNeed confirm for file diff:'));
 
-      function userConfirm() {
+      function userConfirm(): void {
         const rl = readline.createInterface({
           input: process.stdin,
           output: process.stdout,
@@ -102,4 +110,4 @@ module.exports = function (packageName, packageVersion, done) {
 
       userConfirm();
     });
-};
+}
