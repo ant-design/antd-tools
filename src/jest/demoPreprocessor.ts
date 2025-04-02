@@ -53,13 +53,34 @@ function createDemo({ types: t }: { types: typeof babel.types }): babel.PluginOb
       },
 
       CallExpression(path) {
+        const callee = path.node.callee as Extract<
+          babel.types.Expression,
+          {
+            type: 'MemberExpression';
+          }
+        >;
+
+        type Identifier = Extract<
+          typeof callee.object,
+          {
+            type: 'Identifier';
+          }
+        >;
+
         if (
-          path.node.callee.object &&
-          (path.node.callee.object as { name: string }).name === 'ReactDOM' &&
-          path.node.callee.property.name === 'render'
+          callee.object &&
+          (callee.object as Identifier).name === 'ReactDOM' &&
+          (callee.property as Identifier).name === 'render'
         ) {
           const app = t.variableDeclaration('const', [
-            t.variableDeclarator(t.identifier('__Demo'), path.node.arguments[0]),
+            t.variableDeclarator(
+              t.identifier('__Demo'),
+              (
+                path.node as {
+                  arguments: babel.types.Expression[];
+                }
+              ).arguments[0]
+            ),
           ]);
           path.scope.registerDeclaration(path.replaceWith(app)[0]);
           const exportDefault = t.exportDefaultDeclaration(t.identifier('__Demo'));
@@ -93,7 +114,7 @@ interface GetCacheKeyOptions {
   configString: string;
 }
 
-function process(src: string, pathFilename: string): ProcessResult {
+function transform(src: string, pathFilename: string): ProcessResult {
   const markdown = markTwain(src);
   src = getCode(markdown.content);
 
@@ -151,6 +172,6 @@ function getCacheKey(fileData: string, filename: string, options: GetCacheKeyOpt
 }
 
 export default {
-  process,
+  process: transform,
   getCacheKey,
 };
