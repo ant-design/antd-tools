@@ -1,6 +1,8 @@
-const { resolve, isThereHaveBrowserslistConfig } = require('./utils/projectHelper');
+import { resolve, isThereHaveBrowserslistConfig } from './utils/projectHelper';
+import fs from 'fs-extra';
+import type { TransformOptions } from '@babel/core';
 
-module.exports = function (modules) {
+export default function getBabelCommonConfig(modules: boolean): TransformOptions {
   const plugins = [
     [
       resolve('@babel/plugin-transform-typescript'),
@@ -13,7 +15,8 @@ module.exports = function (modules) {
       {
         useESModules: modules === false,
         version:
-          require(`${process.cwd()}/package.json`).dependencies['@babel/runtime'] || '^7.10.4',
+          fs.readJSONSync(`${process.cwd()}/package.json`).dependencies['@babel/runtime'] ||
+          '^7.10.4',
       },
     ],
     resolve('@babel/plugin-transform-spread'),
@@ -39,4 +42,4 @@ module.exports = function (modules) {
     ],
     plugins,
   };
-};
+}
