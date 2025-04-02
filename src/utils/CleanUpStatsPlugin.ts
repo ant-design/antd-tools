@@ -1,6 +1,15 @@
+import type { Compilation, Compiler, WebpackError } from 'webpack';
+
+interface CleanUpStatsPluginOptions {
+  MiniCSSExtractPlugin: boolean;
+  tsLoader: boolean;
+}
+
 // We should use `stats` props of webpack. But it not work in v4.
-class CleanUpStatsPlugin {
-  constructor(option) {
+export default class CleanUpStatsPlugin {
+  option: CleanUpStatsPluginOptions;
+
+  constructor(option?: Partial<CleanUpStatsPluginOptions>) {
     this.option = {
       MiniCSSExtractPlugin: true,
       tsLoader: true,
@@ -8,21 +17,21 @@ class CleanUpStatsPlugin {
     };
   }
 
-  shouldPickStatChild(child) {
+  shouldPickStatChild(child: Compilation): boolean {
     const { MiniCSSExtractPlugin } = this.option;
     if (MiniCSSExtractPlugin && child.name.includes('mini-css-extract-plugin')) return false;
     return true;
   }
 
-  shouldPickWarning(message) {
+  shouldPickWarning(message: WebpackError): boolean {
     const { tsLoader } = this.option;
-    if (tsLoader && /export .* was not found in .*/.test(message)) {
+    if (tsLoader && /export .* was not found in .*/.test(message.details || String(message))) {
       return false;
     }
     return true;
   }
 
-  apply(compiler) {
+  apply(compiler: Compiler): void {
     compiler.hooks.done.tap('CleanUpStatsPlugin', stats => {
       const { children, warnings } = stats.compilation;
       if (Array.isArray(children)) {
@@ -34,5 +43,3 @@ class CleanUpStatsPlugin {
     });
   }
 }
-
-module.exports = CleanUpStatsPlugin;

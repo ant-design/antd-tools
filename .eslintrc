@@ -1,5 +1,7 @@
 {
-  "extends": ["airbnb", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
     "strict": [0],
     "func-names": [0],

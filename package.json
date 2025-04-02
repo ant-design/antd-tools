@@ -1,6 +1,6 @@
 {
   "name": "@ant-design/tools",
-  "version": "18.0.3",
+  "version": "19.0.0",
   "description": "tools for ant design",
   "keywords": [
     "react",
@@ -19,10 +19,13 @@
   "bin": {
     "antd-tools": "./bin/antd-tools.js"
   },
+  "main": "./lib/index",
+  "module": "./es/index",
+  "types": "./lib/index.d.ts",
   "scripts": {
+    "compile": "father build",
     "pub": "git push origin && npm publish --access public",
-    "postinstall": "node lib/init.js",
-    "lint": "eslint lib",
+    "lint": "eslint src",
     "prettier": "node ./script/prettier.js",
     "test": "jest && npm run lint"
   },
@@ -48,11 +51,11 @@
     "commander": "^6.1.0",
     "css-loader": "^5.0.0",
     "css-minimizer-webpack-plugin": "^1.1.5",
+    "fs-extra": "^11.3.0",
     "gh-pages": "^3.0.0",
     "glob": "^7.1.4",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
-    "gulp-strip-code": "^0.1.4",
     "gulp-typescript": "^5.0.1",
     "gulp-watch": "^5.0.1",
     "is-windows": "^1.0.2",
@@ -67,7 +70,6 @@
     "minimist": "^1.2.0",
     "mkdirp": "^1.0.3",
     "node-fetch": "2.6.7",
-    "object-assign": "~4.1.1",
     "postcss": "^8.1.2",
     "postcss-loader": "^4.0.4",
     "prettier": "^2.0.1",
@@ -92,18 +94,33 @@
     "webpackbar": "^5.0.0"
   },
   "devDependencies": {
+    "@rc-component/father-plugin": "^2.1.2",
+    "@types/fs-extra": "^11.0.4",
+    "@types/glob": "^8.1.0",
+    "@types/gulp": "^4.0.17",
+    "@types/gulp-babel": "^6.1.33",
+    "@types/gulp-watch": "^4.1.39",
+    "@types/merge2": "^1.4.4",
+    "@types/minimist": "^1.2.5",
+    "@types/node-fetch": "^2.6.12",
+    "@types/rimraf": "^3.0.0",
+    "@types/through2": "^2.0.41",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^7.2.0",
+    "eslint": "^8.0.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
+    "father": "^4.5.2",
     "jest": "^27.0.3",
     "pre-commit": "1.x"
   },
   "pre-commit": [
     "lint",
     "prettier"
-  ]
+  ],
+  "__npminstall_done": false
 }

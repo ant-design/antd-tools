@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "target": "esnext",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "baseUrl": "./",
+    "jsx": "preserve",
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@@/*": [".dumi/tmp/*"],
+      "@ant-design/tools": ["src/index.ts"]
+    }
+  }
+}

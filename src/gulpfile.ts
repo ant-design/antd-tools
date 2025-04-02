@@ -1,36 +1,29 @@
-const { getProjectPath, injectRequire, getConfig } = require('./utils/projectHelper'); // eslint-disable-line import/order
+import merge2 from 'merge2';
+import through2 from 'through2';
+import webpack from 'webpack';
+import babel from 'gulp-babel';
+import minimist from 'minimist';
+import path from 'path';
+import watch from 'gulp-watch';
+import ts from 'gulp-typescript';
+import gulp from 'gulp';
+import glob from 'glob';
+import fs from 'fs-extra';
+import rimraf from 'rimraf';
 
-injectRequire();
+import { getProjectPath, getConfig } from './utils/projectHelper';
+import getBabelCommonConfig from './getBabelCommonConfig';
+import getTSCommonConfig from './getTSCommonConfig';
+import replaceLib from './replaceLib';
+import checkDiff from './lint/checkDiff';
+import apiCollection from './apiCollection';
+import sortApiTable from './sortApiTable';
 
-const merge2 = require('merge2');
-const { execSync } = require('child_process');
-const through2 = require('through2');
-const webpack = require('webpack');
-const babel = require('gulp-babel');
-const argv = require('minimist')(process.argv.slice(2));
-const chalk = require('chalk');
-const path = require('path');
-const watch = require('gulp-watch');
-const ts = require('gulp-typescript');
-const gulp = require('gulp');
-const glob = require('glob');
-const fs = require('fs');
-const rimraf = require('rimraf');
-const stripCode = require('gulp-strip-code');
-const install = require('./install');
-const runCmd = require('./runCmd');
-const getBabelCommonConfig = require('./getBabelCommonConfig');
-const getNpm = require('./getNpm');
-const selfPackage = require('../package.json');
-const getNpmArgs = require('./utils/get-npm-args');
-const tsConfig = require('./getTSCommonConfig')();
-const replaceLib = require('./replaceLib');
-const checkDeps = require('./lint/checkDeps');
-const checkDiff = require('./lint/checkDiff');
-const apiCollection = require('./apiCollection');
-const sortApiTable = require('./sortApiTable');
+const argv = minimist(process.argv.slice(2));
 
-const packageJson = require(getProjectPath('package.json'));
+const tsConfig = getTSCommonConfig();
+
+const packageJson = fs.readJsonSync(getProjectPath('package.json'));
 
 const tsDefaultReporter = ts.reporter.defaultReporter();
 const cwd = process.cwd();
@@ -43,21 +36,20 @@ const localeDts = `import type { Locale } from '../lib/locale';
 declare const localeValues: Locale;
 export default localeValues;`;
 
-function dist(done) {
+async function dist(done) {
   rimraf.sync(getProjectPath('dist'));
   process.env.RUN_ENV = 'PRODUCTION';
-  const webpackConfig = require(getProjectPath('webpack.config.js'));
-  webpack(webpackConfig, (err, stats) => {
+  const configModule = await import(getProjectPath('webpack.config.js'));
+  const webpackConfig = configModule.default || configModule;
+
+  webpack(webpackConfig, async (err, stats) => {
     if (err) {
       console.error(err.stack || err);
-      if (err.details) {
-        console.error(err.details);
-      }
       return;
     }
 
     const info = stats.toJson();
-    const { dist: { finalize } = {}, bail } = getConfig();
+    const { dist: { finalize } = {}, bail } = await getConfig();
 
     if (stats.hasErrors()) {
       (info.errors || []).forEach(error => {
@@ -94,32 +86,6 @@ function dist(done) {
   });
 }
 
-function tag() {
-  console.log('tagging');
-  const { version } = packageJson;
-  execSync(`git tag ${version}`);
-  execSync(`git push origin ${version}:${version}`);
-  execSync('git push origin master:master');
-  console.log('tagged');
-}
-
-gulp.task(
-  'check-git',
-  gulp.series(done => {
-    runCmd('git', ['status', '--porcelain'], (code, result) => {
-      if (/^\?\?/m.test(result)) {
-        return done(`There are untracked files in the working tree.\n${result}
-      `);
-      }
-      if (/^([ADRM]| [ADRM])/m.test(result)) {
-        return done(`There are uncommitted changes in the working tree.\n${result}
-      `);
-      }
-      return done();
-    });
-  })
-);
-
 gulp.task('clean', () => {
   rimraf.sync(getProjectPath('_site'));
   rimraf.sync(getProjectPath('_data'));
@@ -129,13 +95,6 @@ gulp.task(
   'dist',
   gulp.series(done => {
     dist(done);
-  })
-);
-
-gulp.task(
-  'deps-lint',
-  gulp.series(done => {
-    checkDeps(done);
   })
 );
 
@@ -190,7 +149,7 @@ function babelify(js, modules) {
   if (modules === false) {
     babelConfig.plugins.push(replaceLib);
   }
-  const stream = js.pipe(babel(babelConfig));
+  const stream = js.pipe(babel(babelConfig as Parameters<typeof babel>[0]));
   return stream.pipe(gulp.dest(modules === false ? esDir : libDir));
 }
 
@@ -212,8 +171,8 @@ function insertUseClient() {
   });
 }
 
-function compile(modules) {
-  const { compile: { transformTSFile, transformFile } = {} } = getConfig();
+async function compile(modules?: boolean) {
+  const { compile: { transformTSFile, transformFile } = {} } = await getConfig();
   rimraf.sync(modules !== false ? libDir : esDir);
 
   const assets = gulp
@@ -255,14 +214,6 @@ function compile(modules) {
 
   // Strip content if needed
   let sourceStream = gulp.src(source);
-  if (modules === false) {
-    sourceStream = sourceStream.pipe(
-      stripCode({
-        start_comment: '@remove-on-es-build-begin',
-        end_comment: '@remove-on-es-build-end',
-      })
-    );
-  }
 
   if (transformTSFile) {
     sourceStream = sourceStream.pipe(
@@ -280,7 +231,7 @@ function compile(modules) {
   const tsResult = sourceStream.pipe(
     ts(tsConfig, {
       error(e) {
-        tsDefaultReporter.error(e);
+        tsDefaultReporter.error(e, undefined);
         error = 1;
       },
       finish: tsDefaultReporter.finish,
@@ -318,21 +269,6 @@ function generateLocale() {
   });
 }
 
-function publish(tagString, done) {
-  let args = ['publish', '--with-antd-tools', '--access=public'];
-  if (tagString) {
-    args = args.concat(['--tag', tagString]);
-  }
-  const publishNpm = process.env.PUBLISH_NPM_CLI || 'npm';
-  runCmd(publishNpm, args, code => {
-    console.log('Publish return code:', code);
-    if (!argv['skip-tag'] && !code) {
-      tag();
-    }
-    done(code);
-  });
-}
-
 // We use https://unpkg.com/[name]/?meta to check exist files
 gulp.task(
   'package-diff',
@@ -341,56 +277,22 @@ gulp.task(
   })
 );
 
-function pub(done) {
-  const notOk = !packageJson.version.match(/^\d+\.\d+\.\d+$/);
-  let tagString;
-
-  // Argument tag
-  if (argv['npm-tag']) {
-    tagString = argv['npm-tag'];
-  }
-
-  // Config tag
-  if (!tagString) {
-    const { tag: configTag } = getConfig();
-    if (configTag) {
-      tagString = configTag;
-    }
-  }
-
-  // Auto next tag
-  if (!tagString && notOk) {
-    tagString = 'next';
-  }
-  if (packageJson.scripts['pre-publish'] && !argv['skip-pre-publish']) {
-    runCmd('npm', ['run', 'pre-publish'], code2 => {
-      if (code2) {
-        done(code2);
-        return;
-      }
-      publish(tagString, done);
-    });
-  } else {
-    publish(tagString, done);
-  }
-}
-
-gulp.task('compile-with-es', done => {
+gulp.task('compile-with-es', async done => {
   console.log('[Parallel] Compile to es...');
-  compile(false).on('finish', done);
+  (await compile(false)).on('finish', done);
 });
 
-gulp.task('compile-with-lib', done => {
+gulp.task('compile-with-lib', async done => {
   console.log('[Parallel] Compile to js...');
-  compile().on('finish', () => {
+  (await compile()).on('finish', () => {
     generateLocale();
     done();
   });
 });
 
-gulp.task('compile-finalize', done => {
+gulp.task('compile-finalize', async done => {
   // Additional process of compile finalize
-  const { compile: { finalize } = {} } = getConfig();
+  const { compile: { finalize } = {} } = await getConfig();
   if (finalize) {
     console.log('[Compile] Finalization...');
     finalize();
@@ -401,61 +303,6 @@ gulp.task('compile-finalize', done => {
 gulp.task(
   'compile',
   gulp.series(gulp.parallel('compile-with-es', 'compile-with-lib'), 'compile-finalize')
-);
-
-gulp.task(
-  'install',
-  gulp.series(done => {
-    install(done);
-  })
-);
-
-gulp.task(
-  'pub',
-  gulp.series('check-git', 'compile', 'dist', 'package-diff', done => {
-    pub(done);
-  })
-);
-
-gulp.task(
-  'update-self',
-  gulp.series(done => {
-    getNpm(npm => {
-      console.log(`${npm} updating ${selfPackage.name}`);
-      runCmd(npm, ['update', selfPackage.name], c => {
-        console.log(`${npm} update ${selfPackage.name} end`);
-        done(c);
-      });
-    });
-  })
-);
-
-gulp.task(
-  'guard',
-  gulp.series(done => {
-    function reportError() {
-      console.log(chalk.bgRed('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'));
-      console.log(chalk.bgRed('!! `npm publish` is forbidden for this package. !!'));
-      console.log(chalk.bgRed('!! Use `npm run pub` instead.                   !!'));
-      console.log(chalk.bgRed('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'));
-    }
-    const npmArgs = getNpmArgs();
-    if (npmArgs) {
-      for (let arg = npmArgs.shift(); arg; arg = npmArgs.shift()) {
-        if (
-          /^pu(b(l(i(sh?)?)?)?)?$/.test(arg) &&
-          npmArgs.indexOf('--with-antd-tools') < 0 &&
-          !process.env.npm_config_with_antd_tools
-        ) {
-          reportError();
-          done(1);
-          process.exit(1);
-          return;
-        }
-      }
-    }
-    done();
-  })
 );
 
 gulp.task(
