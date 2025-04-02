@@ -1,4 +1,3 @@
-import { getProjectPath, getConfig } from './utils/projectHelper';
 import merge2 from 'merge2';
 import through2 from 'through2';
 import webpack from 'webpack';
@@ -11,6 +10,8 @@ import gulp from 'gulp';
 import glob from 'glob';
 import fs from 'fs-extra';
 import rimraf from 'rimraf';
+
+import { getProjectPath, getConfig } from './utils/projectHelper';
 import getBabelCommonConfig from './getBabelCommonConfig';
 import getTSCommonConfig from './getTSCommonConfig';
 import replaceLib from './replaceLib';
