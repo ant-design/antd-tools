@@ -99,7 +99,7 @@ export default function (
               done();
             } else if (answer === 'NO') {
               console.log(chalk.red('🚫 Aha! Catch you!'));
-              done(1);
+              done(new Error('User cancel the process.'));
             } else {
               console.log(chalk.yellow('Invalidate input. Type again!'));
               userConfirm();
