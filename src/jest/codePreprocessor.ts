@@ -1,29 +1,45 @@
-const crypto = require('crypto');
-const { createTransformer } = require('babel-jest').default;
-const getBabelCommonConfig = require('../getBabelCommonConfig');
-const rewriteSource = require('./rewriteSource');
-const pkg = require('../../package.json');
+import * as crypto from 'crypto';
+import { createTransformer } from 'babel-jest';
+import getBabelCommonConfig from '../getBabelCommonConfig';
+import rewriteSource from './rewriteSource';
+import pkg from '../../package.json';
+import * as babel from '@babel/core';
 
-const libDir = process.env.LIB_DIR || 'components';
+const libDir: string = process.env.LIB_DIR || 'components';
 
-function processDemo({ types: t }) {
+function processDemo({ types: t }: { types: typeof babel.types }): babel.PluginObj {
   return {
     visitor: {
-      ImportDeclaration(path) {
+      ImportDeclaration(path: babel.NodePath<babel.types.ImportDeclaration>) {
         rewriteSource(t, path, libDir);
       },
     },
   };
 }
 
-module.exports = {
+interface TransformOptions {
+  instrument: boolean;
+}
+
+interface Preprocessor {
+  canInstrument: boolean;
+  process(
+    src: string,
+    filePath: string,
+    config: object,
+    transformOptions: TransformOptions
+  ): string;
+  getCacheKey(): string;
+}
+
+const preprocessor: Preprocessor = {
   canInstrument: true,
-  process(src, path, config, transformOptions) {
+  process(src, filePath, config, transformOptions) {
     global.__clearBabelAntdPlugin && global.__clearBabelAntdPlugin(); // eslint-disable-line
     const babelConfig = getBabelCommonConfig();
-    babelConfig.plugins = [...babelConfig.plugins];
+    babelConfig.plugins = [...(babelConfig.plugins || [])];
 
-    if (/\/demo\//.test(path)) {
+    if (/\/demo\//.test(filePath)) {
       babelConfig.plugins.push(processDemo);
     }
 
@@ -35,15 +51,20 @@ module.exports = {
       },
     ]);
 
-    const babelSupport =
-      path.endsWith('.ts') ||
-      path.endsWith('.tsx') ||
-      path.endsWith('.js') ||
-      path.endsWith('.jsx');
-
+    const babelSupport = /\.(t|j)sx?$/.test(filePath);
     const babelJest = createTransformer(babelConfig);
-    const fileName = babelSupport ? path : 'file.js';
-    return babelJest.process(src, fileName, config, transformOptions);
+    const name = babelSupport ? filePath : 'file.js';
+
+    type ProcessParams = Parameters<typeof babelJest.process>;
+
+    return (
+      babelJest.process as unknown as (
+        src: ProcessParams[0],
+        name: ProcessParams[1],
+        config: object,
+        transformOptions: TransformOptions
+      ) => string
+    )(src, name, config, transformOptions);
   },
 
   getCacheKey() {
@@ -56,3 +77,5 @@ module.exports = {
       .digest('hex');
   },
 };
+
+module.exports = preprocessor;
