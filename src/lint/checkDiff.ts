@@ -1,10 +1,11 @@
 import { getProjectPath } from '../utils/projectHelper';
-import fs from 'fs';
 import { join } from 'path';
 import chalk from 'chalk';
 import fetch from 'node-fetch';
 import readline from 'readline';
 import minimist from 'minimist';
+import Arborist from '@npmcli/arborist';
+import packlist from 'npm-packlist';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -41,43 +42,90 @@ export default function (
   const mergedVersion = getMajorVersion(packageVersion, argv.version);
   console.log(chalk.cyan(`Fetching latest version file list...${packageName}${mergedVersion}`));
 
-  fetch(`https://unpkg.com/${packageName}${mergedVersion}/?meta`)
-    .then(res => {
-      const version = getVersionFromURL(res.url, packageName);
-      return res.json().then((json: object) => ({ version, ...json }));
-    })
-    .then(({ version, files: pkgFiles }: { version: string; files: FileItem[] }) => {
-      function flattenPath(files: FileItem[], fileList: string[] = []): string[] {
-        (files || []).forEach(({ path, files: subFiles }) => {
-          fileList.push(path);
-          flattenPath(subFiles, fileList);
-        });
-        return fileList;
-      }
-      return { version, fileList: flattenPath(pkgFiles) };
-    })
-    .then(({ version, fileList }) => {
-      const missingFiles = fileList.filter(filePath => {
-        const concatFilePath = argv.path ? join(argv.path, filePath) : filePath;
+  function getLatestVersionFileList() {
+    return fetch(`https://unpkg.com/${packageName}${mergedVersion}/?meta`)
+      .then(res => {
+        const version = getVersionFromURL(res.url, packageName);
+        return res.json().then((json: object) => ({ version, ...json }));
+      })
+      .then(({ version, files: pkgFiles }: { version: string; files: FileItem[] }) => {
+        function flattenPath(files: FileItem[], fileList: string[] = []): string[] {
+          (files || []).forEach(({ path, files: subFiles }) => {
+            const realPath = argv.path ? join(argv.path, path) : path
+            fileList.push(realPath);
+            flattenPath(subFiles, fileList);
+          });
+          return fileList;
+        }
+        return { version, fileList: flattenPath(pkgFiles) };
+      })
+  }
 
-        return !fs.existsSync(getProjectPath(concatFilePath));
+  function getLocalVersionFileList() {
+    const arborist = new Arborist({ path: getProjectPath() });
+    return arborist.loadActual().then(packlist) as Promise<string[]>;
+  }
+
+
+  Promise.all([
+    getLocalVersionFileList(),
+    getLatestVersionFileList(),
+  ])
+    .then(([localFiles, { version, fileList }]) => {
+      const localSet = new Set(localFiles);
+      const remoteSet = new Set(fileList);
+
+      const missingFiles: string[] = [];
+      const addedFiles: string[] = [];
+
+      const allFiles = new Set([...fileList, ...localFiles]);
+      allFiles.forEach(filePath => {
+        if (!localSet.has(filePath)) {
+          missingFiles.push(filePath);
+        } else if (!remoteSet.has(filePath)) {
+          addedFiles.push(filePath);
+        }
       });
+      return { missingFiles, addedFiles, version };
+    })
+    .then(({ missingFiles, addedFiles, version }) => {
+
+
+      if (addedFiles.length) {
+        console.log(
+          chalk.yellow(`⚠️  Some file added in current build (last version: ${version}):`)
+        );
+        addedFiles.forEach(filePath => {
+          console.log(chalk.yellow(` + ${filePath}`));
+        });
+
+        // Separator
+        console.log();
+        console.log(chalk.gray(`-`.repeat(process.stdout.columns || 64)));
+        console.log();
+      }
 
       if (missingFiles.length) {
         console.log(
           chalk.red(`⚠️  Some file missing in current build (last version: ${version}):`)
         );
         missingFiles.forEach(filePath => {
-          console.log(` - ${filePath}`);
+          console.log(chalk.red(` - ${filePath}`));
         });
-        return Promise.reject('Please double confirm with files.');
       }
 
+      const total = missingFiles.length + addedFiles.length;
+
+      if (total) {
+        return Promise.reject(
+          new Error(`Please double confirm with files. ${missingFiles.length} missing, ${addedFiles.length} added.`)
+        );
+      }
       console.log(
         chalk.green('✅ Nothing missing compare to latest version:'),
-        chalk.yellow(version)
+        chalk.gray(version)
       );
-      return 0;
+      return Promise.resolve(true);
     })
     .then(() => done())
     .catch(err => {
