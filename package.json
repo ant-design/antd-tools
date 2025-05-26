@@ -100,6 +100,7 @@
     "webpackbar": "^5.0.0"
   },
   "devDependencies": {
+    "@npmcli/arborist": "^9.1.1",
     "@rc-component/father-plugin": "^2.1.2",
     "@types/fs-extra": "^11.0.4",
     "@types/glob": "^8.1.0",
@@ -122,6 +123,7 @@
     "eslint-plugin-react": "^7.13.0",
     "father": "^4.5.2",
     "jest": "^27.0.3",
+    "npm-packlist": "^10.0.0",
     "pre-commit": "1.x"
   },
   "pre-commit": [
