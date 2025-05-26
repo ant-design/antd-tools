@@ -96,7 +96,7 @@ export default function (
           chalk.yellow(`⚠️  Some file added in current build (last version: ${version}):`)
         );
         addedFiles.forEach(filePath => {
-          console.log(chalk.yellow(` + ${filePath}`));
+          console.log(` + ${filePath}`);
         });
 
         // Separator
@@ -110,7 +110,7 @@ export default function (
           chalk.red(`⚠️  Some file missing in current build (last version: ${version}):`)
         );
         missingFiles.forEach(filePath => {
-          console.log(chalk.red(` - ${filePath}`));
+          console.log(` - ${filePath}`);
         });
       }
 
@@ -125,7 +125,7 @@ export default function (
         chalk.green('✅ Nothing missing compare to latest version:'),
         chalk.gray(version)
       );
-      return Promise.resolve(true);
+      return 0;
     })
     .then(() => done())
     .catch(err => {
