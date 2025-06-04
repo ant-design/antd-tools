@@ -45,6 +45,7 @@
     "@babel/plugin-transform-typescript": "^7.10.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
+    "@npmcli/arborist": "^9.1.1",
     "ansi-styles": "^4.0.0",
     "autoprefixer": "^10.0.1",
     "babel-jest": "^28.1.0",
@@ -76,6 +77,7 @@
     "minimist": "^1.2.0",
     "mkdirp": "^1.0.3",
     "node-fetch": "2.6.7",
+    "npm-packlist": "^10.0.0",
     "postcss": "^8.1.2",
     "postcss-loader": "^4.0.4",
     "prettier": "^2.0.1",
@@ -100,7 +102,6 @@
     "webpackbar": "^5.0.0"
   },
   "devDependencies": {
-    "@npmcli/arborist": "^9.1.1",
     "@rc-component/father-plugin": "^2.1.2",
     "@types/fs-extra": "^11.0.4",
     "@types/glob": "^8.1.0",
@@ -123,7 +124,6 @@
     "eslint-plugin-react": "^7.13.0",
     "father": "^4.5.2",
     "jest": "^27.0.3",
-    "npm-packlist": "^10.0.0",
     "pre-commit": "1.x"
   },
   "pre-commit": [
