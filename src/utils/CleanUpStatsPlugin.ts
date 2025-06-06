@@ -38,7 +38,7 @@ export default class CleanUpStatsPlugin {
         stats.compilation.children = children.filter(child => this.shouldPickStatChild(child));
       }
       if (Array.isArray(warnings)) {
-        stats.compilation.warnings = warnings.filter(message => this.shouldPickWarning(message));
+        stats.compilation.warnings = warnings.filter(message => this.shouldPickWarning(message as WebpackError));
       }
     });
   }
