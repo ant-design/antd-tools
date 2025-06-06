@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 20
       
-      - uses: oven-sh/setup-bun@v1
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
@@ -24,3 +24,6 @@ jobs:
 
       - name: Run lint
         run: bun run lint
+
+      - name: Run build
+        run: bun run compile

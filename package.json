@@ -32,8 +32,7 @@
     "compile": "father build",
     "prepublishOnly": "npm run compile",
     "lint": "eslint src",
-    "prettier": "node ./script/prettier.js",
-    "test": "jest && npm run lint"
+    "prettier": "node ./script/prettier.js"
   },
   "dependencies": {
     "@babel/core": "^7.4.5",
