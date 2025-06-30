@@ -176,7 +176,7 @@ async function compile(modules?: boolean) {
   rimraf.sync(modules !== false ? libDir : esDir);
 
   const assets = gulp
-    .src(['components/**/*.@(png|svg)'])
+    .src(['components/**/*.@(png|svg|json)'])
     .pipe(gulp.dest(modules === false ? esDir : libDir));
   let error = 0;
 
