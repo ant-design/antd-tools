@@ -9,7 +9,7 @@ interface BabelConfig extends TransformOptions {
 export default function getBabelCommonConfig(modules?: boolean): BabelConfig {
   const plugins = [
     [
-      'babel-plugin-react-compiler',
+      resolve('babel-plugin-react-compiler'),
       {
         target: '18', // 最低支持的版本是 React 18
       },
