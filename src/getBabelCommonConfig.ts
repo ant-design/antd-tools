@@ -1,13 +1,13 @@
-import { resolve, isThereHaveBrowserslistConfig } from './utils/projectHelper';
 import fs from 'fs-extra';
-import type { TransformOptions } from '@babel/core';
+import type { PluginItem, TransformOptions } from '@babel/core';
+import { resolve, isThereHaveBrowserslistConfig } from './utils/projectHelper';
 
 interface BabelConfig extends TransformOptions {
   cacheDirectory?: boolean;
 }
 
 export default function getBabelCommonConfig(modules?: boolean): BabelConfig {
-  const plugins = [
+  const plugins: PluginItem[] = [
     [
       resolve('babel-plugin-react-compiler'),
       {
