@@ -2,10 +2,18 @@ import { resolve, isThereHaveBrowserslistConfig } from './utils/projectHelper';
 import fs from 'fs-extra';
 import type { TransformOptions } from '@babel/core';
 
-export default function getBabelCommonConfig(modules?: boolean): TransformOptions & {
+interface BabelConfig extends TransformOptions {
   cacheDirectory?: boolean;
-} {
+}
+
+export default function getBabelCommonConfig(modules?: boolean): BabelConfig {
   const plugins = [
+    [
+      'babel-plugin-react-compiler',
+      {
+        target: '18', // 最低支持的版本是 React 18
+      },
+    ],
     [
       resolve('@babel/plugin-transform-typescript'),
       {

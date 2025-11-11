@@ -37,7 +37,7 @@ files.forEach(file => {
       fs.writeFileSync(file, output, 'utf8');
       console.log(`\x1b[34m ${file} is prettier`);
     }
-  } catch (e) {
+  } catch {
     didError = true;
   }
 });
@@ -45,4 +45,5 @@ files.forEach(file => {
 if (didError) {
   process.exit(1);
 }
+
 console.log('\x1b[32m prettier success!');
