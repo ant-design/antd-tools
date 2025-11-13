@@ -10,7 +10,6 @@ import gulp from 'gulp';
 import glob from 'glob';
 import fs from 'fs-extra';
 import rimraf from 'rimraf';
-
 import { getProjectPath, getConfig } from './utils/projectHelper';
 import getBabelCommonConfig from './getBabelCommonConfig';
 import getTSCommonConfig from './getTSCommonConfig';
@@ -28,9 +27,11 @@ const packageJson = fs.readJsonSync(getProjectPath('package.json'));
 
 const tsDefaultReporter = ts.reporter.defaultReporter();
 const cwd = process.cwd();
-const libDir = getProjectPath('lib');
+const cjsDir = getProjectPath('lib');
 const esDir = getProjectPath('es');
 const localeDir = getProjectPath('locale');
+
+const libDir = process.env.LIB_DIR || 'components';
 
 // FIXME: hard code, not find typescript can modify the path resolution
 const localeDts = `import type { Locale } from '../lib/locale';
@@ -144,18 +145,14 @@ gulp.task(
   })
 );
 
-const _libDir = process.env.LIB_DIR || 'components';
-
 function babelify(js: ICompileStream['js'], modules: boolean) {
-  const babelConfig = getBabelCommonConfig(modules, {
-    enabledReactCompiler: _libDir === 'dist',
-  });
+  const babelConfig = getBabelCommonConfig(modules, { enabledReactCompiler: libDir === 'dist' });
   delete babelConfig.cacheDirectory;
   if (modules === false) {
     babelConfig.plugins.push(replaceLib);
   }
   const stream = js.pipe(babel(babelConfig as Parameters<typeof babel>[0]));
-  return stream.pipe(gulp.dest(modules === false ? esDir : libDir));
+  return stream.pipe(gulp.dest(modules === false ? esDir : cjsDir));
 }
 
 function insertUseClient() {
@@ -178,15 +175,15 @@ function insertUseClient() {
 
 async function compile(modules?: boolean) {
   const { compile: { transformTSFile, transformFile } = {} } = await getConfig();
-  rimraf.sync(modules !== false ? libDir : esDir);
+  rimraf.sync(modules !== false ? cjsDir : esDir);
 
   const assets = gulp
     .src(['components/**/*.@(png|svg|json)'])
-    .pipe(gulp.dest(modules === false ? esDir : libDir));
+    .pipe(gulp.dest(modules === false ? esDir : cjsDir));
   let error = 0;
 
   // =============================== FILE ===============================
-  let transformFileStream;
+  let transformFileStream: NodeJS.ReadWriteStream;
 
   if (transformFile) {
     transformFileStream = gulp
@@ -199,7 +196,7 @@ async function compile(modules?: boolean) {
           next();
         })
       )
-      .pipe(gulp.dest(modules === false ? esDir : libDir));
+      .pipe(gulp.dest(modules === false ? esDir : cjsDir));
   }
 
   // ================================ TS ================================
@@ -252,7 +249,7 @@ async function compile(modules?: boolean) {
   tsResult.on('finish', check);
   tsResult.on('end', check);
   const tsFilesStream = babelify(tsResult.js, modules);
-  const tsd = tsResult.dts.pipe(gulp.dest(modules === false ? esDir : libDir));
+  const tsd = tsResult.dts.pipe(gulp.dest(modules === false ? esDir : cjsDir));
   return merge2([tsFilesStream, tsd, assets, transformFileStream].filter(s => s));
 }
 
