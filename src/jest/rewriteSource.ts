@@ -1,9 +1,8 @@
-import type { NodePath } from '@babel/traverse';
-import type { ImportDeclaration } from '@babel/types';
+import * as babel from '@babel/core';
 
 function rewriteSource(
-  t: typeof import('@babel/types'),
-  path: NodePath<ImportDeclaration>,
+  t: typeof babel.types,
+  path: babel.NodePath<babel.types.ImportDeclaration>,
   libDir: string
 ): void {
   if (libDir === 'dist') {

@@ -35,9 +35,14 @@ interface GetWebpackConfigFunction {
   imageOptions: typeof imageOptions;
 }
 
+const libDir = process.env.LIB_DIR || 'components';
+
 const getWebpackConfig: GetWebpackConfigFunction = (modules?: boolean): Configuration[] => {
   const pkg: PackageJson = readJsonSync(getProjectPath('package.json'));
-  const babelConfig = getBabelCommonConfig(modules || false);
+
+  const babelConfig = getBabelCommonConfig(modules || false, {
+    enabledReactCompiler: libDir === 'dist',
+  });
 
   babelConfig.plugins.push([
     resolve('babel-plugin-import'),

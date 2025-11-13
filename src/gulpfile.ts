@@ -18,6 +18,7 @@ import replaceLib from './replaceLib';
 import checkDiff from './lint/checkDiff';
 import apiCollection from './apiCollection';
 import sortApiTable from './sortApiTable';
+import type { ICompileStream } from 'gulp-typescript/release/project';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -143,8 +144,10 @@ gulp.task(
   })
 );
 
-function babelify(js, modules) {
-  const babelConfig = getBabelCommonConfig(modules);
+function babelify(js: ICompileStream['js'], modules: boolean) {
+  const babelConfig = getBabelCommonConfig(modules, {
+    enabledReactCompiler: libDir === 'dist',
+  });
   delete babelConfig.cacheDirectory;
   if (modules === false) {
     babelConfig.plugins.push(replaceLib);
