@@ -144,9 +144,11 @@ gulp.task(
   })
 );
 
+const _libDir = process.env.LIB_DIR || 'components';
+
 function babelify(js: ICompileStream['js'], modules: boolean) {
   const babelConfig = getBabelCommonConfig(modules, {
-    enabledReactCompiler: libDir === 'dist',
+    enabledReactCompiler: _libDir === 'dist',
   });
   delete babelConfig.cacheDirectory;
   if (modules === false) {
