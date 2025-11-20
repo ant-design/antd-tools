@@ -28,20 +28,20 @@ const imageOptions = {
 };
 
 interface GetWebpackConfigFunction {
-  (modules?: boolean): Configuration[];
+  (modules?: boolean, options?: { enabledReactCompiler?: boolean }): Configuration[];
   webpack: typeof webpack;
   svgRegex: RegExp;
   svgOptions: typeof svgOptions;
   imageOptions: typeof imageOptions;
 }
 
-const libDir = process.env.LIB_DIR || 'components';
+const getWebpackConfig: GetWebpackConfigFunction = (modules, options = {}) => {
+  const { enabledReactCompiler } = options;
 
-const getWebpackConfig: GetWebpackConfigFunction = (modules?: boolean): Configuration[] => {
   const pkg: PackageJson = readJsonSync(getProjectPath('package.json'));
 
   const babelConfig = getBabelCommonConfig(modules || false, {
-    enabledReactCompiler: libDir === 'dist',
+    enabledReactCompiler: enabledReactCompiler,
   });
 
   babelConfig.plugins.push([
@@ -104,13 +104,7 @@ const getWebpackConfig: GetWebpackConfigFunction = (modules?: boolean): Configur
         'readline',
         'repl',
         'tls',
-      ].reduce(
-        (acc, name) => ({
-          ...acc,
-          [name]: false,
-        }),
-        {}
-      ),
+      ].reduce((acc, name) => ({ ...acc, [name]: false }), {}),
     },
 
     module: {
