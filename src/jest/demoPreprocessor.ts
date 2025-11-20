@@ -120,9 +120,7 @@ function transform(src: string, pathFilename: string): ProcessResult {
 
   global.__clearBabelAntdPlugin && global.__clearBabelAntdPlugin(); // eslint-disable-line
 
-  const babelConfig = getBabelCommonConfig(undefined, {
-    enabledReactCompiler: libDir === 'dist',
-  });
+  const babelConfig = getBabelCommonConfig();
 
   babelConfig.plugins = [...babelConfig.plugins];
   babelConfig.plugins.push(createDemo);

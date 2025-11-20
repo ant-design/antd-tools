@@ -36,9 +36,7 @@ const preprocessor: Preprocessor = {
   canInstrument: true,
   process(src, filePath, config, transformOptions) {
     global.__clearBabelAntdPlugin && global.__clearBabelAntdPlugin(); // eslint-disable-line
-    const babelConfig = getBabelCommonConfig(undefined, {
-      enabledReactCompiler: libDir === 'dist',
-    });
+    const babelConfig = getBabelCommonConfig();
     babelConfig.plugins = [...(babelConfig.plugins || [])];
 
     if (/\/demo\//.test(filePath)) {
