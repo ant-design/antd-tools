@@ -52,7 +52,7 @@ export default function (
         function flattenPath(files: FileItem[], fileList: string[] = []): string[] {
           (files || []).forEach(({ path, files: subFiles }) => {
             const realPath = argv.path ? join(argv.path, path) : path;
-            fileList.push(realPath.replace(/^\//g, ''));
+            fileList.push(realPath.replace(/^\//, ''));
             flattenPath(subFiles, fileList);
           });
           return fileList;
