@@ -51,8 +51,8 @@ export default function (
       .then(({ version, files: pkgFiles }: { version: string; files: FileItem[] }) => {
         function flattenPath(files: FileItem[], fileList: string[] = []): string[] {
           (files || []).forEach(({ path, files: subFiles }) => {
-            const realPath = argv.path ? join(argv.path, path) : path
-            fileList.push(realPath);
+            const realPath = argv.path ? join(argv.path, path) : path;
+            fileList.push(realPath.replace(/^\//, ''));
             flattenPath(subFiles, fileList);
           });
           return fileList;
@@ -89,8 +89,6 @@ export default function (
       return { missingFiles, addedFiles, version };
     })
     .then(({ missingFiles, addedFiles, version }) => {
-
-
       if (addedFiles.length) {
         console.log(
           chalk.yellow(`⚠️  Some file added in current build (last version: ${version}):`)
