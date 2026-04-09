@@ -35,6 +35,33 @@ interface GetWebpackConfigFunction {
   imageOptions: typeof imageOptions;
 }
 
+const shouldFallbackToNativeProgressPlugin = () => {
+  const [major = 0, minor = 0] = webpack.version
+    .split('.')
+    .map((version) => Number.parseInt(version, 10));
+
+  return major > 5 || (major === 5 && minor >= 106);
+};
+
+class CompatibleProgressPlugin {
+  private readonly plugin: { apply(compiler: webpack.Compiler): void };
+
+  constructor() {
+    this.plugin = shouldFallbackToNativeProgressPlugin()
+      ? new webpack.ProgressPlugin({
+          activeModules: true,
+        })
+      : new WebpackBar({
+          name: '🚚  Ant Design Tools',
+          color: '#2f54eb',
+        });
+  }
+
+  apply(compiler: webpack.Compiler) {
+    this.plugin.apply(compiler);
+  }
+}
+
 const getWebpackConfig: GetWebpackConfigFunction = (modules, options = {}) => {
   const { enabledReactCompiler } = options;
 
@@ -179,10 +206,7 @@ ${pkg.name} v${pkg.version}
 Copyright 2015-present, Alipay, Inc.
 All rights reserved.
       `),
-      new WebpackBar({
-        name: '🚚  Ant Design Tools',
-        color: '#2f54eb',
-      }),
+      new CompatibleProgressPlugin(),
       new CleanUpStatsPlugin(),
     ],
 
