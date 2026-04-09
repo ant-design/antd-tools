@@ -1,7 +1,6 @@
 import { getProjectPath, resolve } from './utils/projectHelper';
 import * as path from 'path';
 import * as webpack from 'webpack';
-import WebpackBar from 'webpackbar';
 import webpackMerge from 'webpack-merge';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -179,9 +178,8 @@ ${pkg.name} v${pkg.version}
 Copyright 2015-present, Alipay, Inc.
 All rights reserved.
       `),
-      new WebpackBar({
-        name: '🚚  Ant Design Tools',
-        color: '#2f54eb',
+      new webpack.ProgressPlugin({
+        activeModules: true,
       }),
       new CleanUpStatsPlugin(),
     ],
