@@ -97,8 +97,7 @@
     "unified": "^8.0.0",
     "url-loader": "^4.0.0",
     "webpack": "^5.0.0",
-    "webpack-merge": "^4.2.1",
-    "webpackbar": "^5.0.0"
+    "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
     "@rc-component/father-plugin": "^2.1.2",
