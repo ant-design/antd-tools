@@ -19,7 +19,9 @@ export default class CleanUpStatsPlugin {
 
   shouldPickStatChild(child: Compilation): boolean {
     const { MiniCSSExtractPlugin } = this.option;
-    if (MiniCSSExtractPlugin && child.name.includes('mini-css-extract-plugin')) return false;
+    if (MiniCSSExtractPlugin && child.name?.includes('mini-css-extract-plugin')) {
+      return false;
+    }
     return true;
   }
 
@@ -38,7 +40,9 @@ export default class CleanUpStatsPlugin {
         stats.compilation.children = children.filter(child => this.shouldPickStatChild(child));
       }
       if (Array.isArray(warnings)) {
-        stats.compilation.warnings = warnings.filter(message => this.shouldPickWarning(message as WebpackError));
+        stats.compilation.warnings = warnings.filter(message =>
+          this.shouldPickWarning(message as WebpackError)
+        );
       }
     });
   }

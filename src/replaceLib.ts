@@ -3,10 +3,11 @@
 import { dirname } from 'path';
 import fs from 'fs';
 import { getProjectPath } from './utils/projectHelper';
-import type { NodePath } from '@babel/traverse';
-import type { ImportDeclaration, ExportNamedDeclaration } from '@babel/types';
+import type { NodePath, types as BabelTypes } from '@babel/core';
 
-function replacePath(path: NodePath<ImportDeclaration | ExportNamedDeclaration>): void {
+function replacePath(
+  path: NodePath<BabelTypes.ImportDeclaration | BabelTypes.ExportNamedDeclaration>
+): void {
   const source = path.node.source;
   if (source && /\/lib\//.test(source.value)) {
     const esModule = source.value.replace('/lib/', '/es/');

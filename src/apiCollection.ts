@@ -8,12 +8,16 @@ const components: { [key: string]: string[] } = {};
 
 function mappingPropLine(component: string, line: string): void {
   const propMatch = line.match(PROP_NAME);
-  if (!propMatch) return;
+  if (!propMatch) {
+    return;
+  }
 
   const propName = propMatch[1];
-  if (!/^[a-z]/.test(propName)) return;
+  if (!/^[a-z]/.test(propName)) {
+    return;
+  }
 
-  components[component] = Array.from(new Set([...(components[component] || []), propName]));
+  components[component] = Array.from(new Set<string>([...(components[component] || []), propName]));
 }
 
 function apiReport(entities: { [key: string]: string[] }): { [key: string]: string[] } {
@@ -49,7 +53,9 @@ export default (): void => {
     files.forEach(filePath => {
       const content = fs.readFileSync(filePath, 'utf8');
       const match = filePath.match(COMPONENT_NAME);
-      if (!match) return;
+      if (!match) {
+        return;
+      }
       const component = match[1];
 
       const lines = content.split(/[\r\n]+/);

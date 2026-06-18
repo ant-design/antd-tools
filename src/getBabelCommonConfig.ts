@@ -1,17 +1,17 @@
 import fs from 'fs-extra';
-import type { PluginItem, TransformOptions } from '@babel/core';
+import type { InputOptions, PluginItem } from '@babel/core';
 import { resolve, isThereHaveBrowserslistConfig } from './utils/projectHelper';
 
 interface BabelConfigOptions {
   enabledReactCompiler?: boolean;
 }
 
-interface BabelConfig extends TransformOptions {
+interface BabelConfig extends InputOptions {
   cacheDirectory?: boolean;
 }
 
 function getBabelCommonConfig(modules?: boolean, options: BabelConfigOptions = {}): BabelConfig {
-  const plugins: PluginItem[] = [
+  const plugins: PluginItem<object>[] = [
     [
       resolve('@babel/plugin-transform-typescript'),
       {
@@ -28,7 +28,7 @@ function getBabelCommonConfig(modules?: boolean, options: BabelConfigOptions = {
       },
     ],
     resolve('@babel/plugin-transform-spread'),
-    resolve('@babel/plugin-proposal-class-properties'),
+    resolve('@babel/plugin-transform-class-properties'),
     resolve('@babel/plugin-transform-classes'),
     resolve('babel-plugin-transform-dev-warning'),
     resolve('@babel/plugin-transform-private-methods'),

@@ -12,8 +12,12 @@ const libDir: string = process.env.LIB_DIR || 'components';
 function getCode(tree: unknown): string {
   let code: string = '';
   const find = (node: unknown): void => {
-    if (code) return;
-    if (!JsonML.isElement(node)) return;
+    if (code) {
+      return;
+    }
+    if (!JsonML.isElement(node)) {
+      return;
+    }
     if (JsonML.getTagName(node) !== 'pre') {
       (JsonML.getChildren(node) as unknown[]).forEach(find);
       return;
@@ -27,7 +31,7 @@ function getCode(tree: unknown): string {
   return code;
 }
 
-function createDemo({ types: t }: { types: typeof babel.types }): babel.PluginObj {
+function createDemo({ types: t }: { types: typeof babel.types }): babel.PluginObject {
   return {
     visitor: {
       Program(path) {
@@ -118,11 +122,12 @@ function transform(src: string, pathFilename: string): ProcessResult {
   const markdown = markTwain(src);
   src = getCode(markdown.content);
 
-  global.__clearBabelAntdPlugin && global.__clearBabelAntdPlugin(); // eslint-disable-line
+  global.__clearBabelAntdPlugin?.();
 
   const babelConfig = getBabelCommonConfig();
 
-  babelConfig.plugins = [...babelConfig.plugins];
+  babelConfig.plugins = Array.isArray(babelConfig.plugins) ? [...babelConfig.plugins] : [];
+
   babelConfig.plugins.push(createDemo);
 
   if (libDir !== 'dist') {
@@ -146,7 +151,7 @@ function transform(src: string, pathFilename: string): ProcessResult {
 
   babelConfig.filename = pathFilename;
 
-  src = babel.transform(src, babelConfig)!.code as string;
+  src = babel.transformSync(src, babelConfig)!.code as string;
 
   return {
     code: src,

@@ -50,11 +50,11 @@ async function dist(done) {
       return;
     }
 
-    const info = stats.toJson();
+    const info = stats?.toJson();
     const { dist: { finalize } = {}, bail } = await getConfig();
 
-    if (stats.hasErrors()) {
-      (info.errors || []).forEach(error => {
+    if (stats?.hasErrors()) {
+      (info?.errors || []).forEach(error => {
         console.error(error);
       });
       // https://github.com/ant-design/ant-design/pull/31662
@@ -63,11 +63,11 @@ async function dist(done) {
       }
     }
 
-    if (stats.hasWarnings()) {
-      console.warn(info.warnings);
+    if (stats?.hasWarnings()) {
+      console.warn(info?.warnings);
     }
 
-    const buildInfo = stats.toString({
+    const buildInfo = stats?.toString({
       colors: true,
       children: true,
       chunks: false,
@@ -102,7 +102,7 @@ gulp.task(
 
 const tsFiles = ['**/*.ts', '**/*.tsx', '!node_modules/**/*.*', 'typings/**/*.d.ts'];
 
-function compileTs(stream) {
+function compileTs(stream: NodeJS.ReadWriteStream) {
   return stream
     .pipe(ts(tsConfig))
     .js.pipe(
@@ -145,11 +145,11 @@ gulp.task(
   })
 );
 
-function babelify(js: ICompileStream['js'], modules: boolean) {
+function babelify(js: ICompileStream['js'], modules?: boolean) {
   const babelConfig = getBabelCommonConfig(modules, { enabledReactCompiler: libDir === 'dist' });
   delete babelConfig.cacheDirectory;
   if (modules === false) {
-    babelConfig.plugins.push(replaceLib);
+    babelConfig.plugins?.push(replaceLib);
   }
   const stream = js.pipe(babel(babelConfig as Parameters<typeof babel>[0]));
   return stream.pipe(gulp.dest(modules === false ? esDir : cjsDir));
@@ -233,7 +233,7 @@ async function compile(modules?: boolean) {
   const tsResult = sourceStream.pipe(
     ts(tsConfig, {
       error(e) {
-        tsDefaultReporter.error(e, undefined);
+        tsDefaultReporter.error?.(e, undefined);
         error = 1;
       },
       finish: tsDefaultReporter.finish,
@@ -250,7 +250,7 @@ async function compile(modules?: boolean) {
   tsResult.on('end', check);
   const tsFilesStream = babelify(tsResult.js, modules);
   const tsd = tsResult.dts.pipe(gulp.dest(modules === false ? esDir : cjsDir));
-  return merge2([tsFilesStream, tsd, assets, transformFileStream].filter(s => s));
+  return merge2([tsFilesStream, tsd, assets, transformFileStream].filter(Boolean));
 }
 
 function generateLocale() {
