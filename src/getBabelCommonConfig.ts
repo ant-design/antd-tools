@@ -28,6 +28,7 @@ function getBabelCommonConfig(modules?: boolean, options: BabelConfigOptions = {
       },
     ],
     resolve('@babel/plugin-transform-spread'),
+    resolve('@babel/plugin-transform-class-static-block'),
     resolve('@babel/plugin-proposal-class-properties'),
     resolve('@babel/plugin-transform-classes'),
     resolve('babel-plugin-transform-dev-warning'),
