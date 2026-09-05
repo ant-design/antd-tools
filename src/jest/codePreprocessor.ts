@@ -21,6 +21,8 @@ interface TransformOptions {
   instrument: boolean;
 }
 
+type CacheKey = NonNullable<ReturnType<typeof createTransformer>['getCacheKey']>;
+
 interface Preprocessor {
   canInstrument: boolean;
   process(
@@ -29,31 +31,36 @@ interface Preprocessor {
     config: object,
     transformOptions: TransformOptions
   ): string;
-  getCacheKey(): string;
+  getCacheKey: CacheKey;
+}
+
+function getTransformer(filePath: string) {
+  const babelConfig = getBabelCommonConfig();
+  babelConfig.plugins = [...(babelConfig.plugins || [])];
+
+  if (/\/demo\//.test(filePath)) {
+    babelConfig.plugins.push(processDemo);
+  }
+
+  babelConfig.plugins.push([
+    require.resolve('babel-plugin-import'),
+    {
+      libraryName: 'antd-mobile',
+      libraryDirectory: '../../../../components',
+    },
+  ]);
+
+  return {
+    transformer: createTransformer(babelConfig),
+    filename: /\.(t|j)sx?$/.test(filePath) ? filePath : 'file.js',
+  };
 }
 
 const preprocessor: Preprocessor = {
   canInstrument: true,
   process(src, filePath, config, transformOptions) {
     global.__clearBabelAntdPlugin && global.__clearBabelAntdPlugin(); // eslint-disable-line
-    const babelConfig = getBabelCommonConfig();
-    babelConfig.plugins = [...(babelConfig.plugins || [])];
-
-    if (/\/demo\//.test(filePath)) {
-      babelConfig.plugins.push(processDemo);
-    }
-
-    babelConfig.plugins.push([
-      require.resolve('babel-plugin-import'),
-      {
-        libraryName: 'antd-mobile',
-        libraryDirectory: '../../../../components',
-      },
-    ]);
-
-    const babelSupport = /\.(t|j)sx?$/.test(filePath);
-    const babelJest = createTransformer(babelConfig);
-    const name = babelSupport ? filePath : 'file.js';
+    const { transformer: babelJest, filename: name } = getTransformer(filePath);
 
     type ProcessParams = Parameters<typeof babelJest.process>;
 
@@ -67,9 +74,14 @@ const preprocessor: Preprocessor = {
     )(src, name, config, transformOptions);
   },
 
-  getCacheKey() {
+  getCacheKey(src, filePath, options) {
+    const { transformer, filename } = getTransformer(filePath);
+
     return crypto
       .createHash('md5')
+      .update(transformer.getCacheKey(src, filename, options))
+      .update('\0', 'utf8')
+      .update(filePath)
       .update('\0', 'utf8')
       .update(libDir)
       .update('\0', 'utf8')
