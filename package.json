@@ -98,7 +98,7 @@
     "uglify-js": "^3.17.4",
     "unified": "^8.0.0",
     "url-loader": "^4.0.0",
-    "webpack": "^5.0.0",
+    "webpack": "^5.112.2",
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
