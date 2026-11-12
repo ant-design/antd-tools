@@ -26,8 +26,13 @@ const imageOptions = {
   limit: 10000,
 };
 
+interface Options {
+  enabledReactCompiler?: boolean;
+  overrideStrict?: 'strict' | 'non-strict';
+}
+
 interface GetWebpackConfigFunction {
-  (modules?: boolean, options?: { enabledReactCompiler?: boolean }): Configuration[];
+  (modules?: boolean, options?: Options): Configuration[];
   webpack: typeof webpack;
   svgRegex: RegExp;
   svgOptions: typeof svgOptions;
@@ -35,7 +40,7 @@ interface GetWebpackConfigFunction {
 }
 
 const getWebpackConfig: GetWebpackConfigFunction = (modules, options = {}) => {
-  const { enabledReactCompiler } = options;
+  const { enabledReactCompiler, overrideStrict } = options;
 
   const pkg: PackageJson = readJsonSync(getProjectPath('package.json'));
 
@@ -43,7 +48,7 @@ const getWebpackConfig: GetWebpackConfigFunction = (modules, options = {}) => {
     enabledReactCompiler: enabledReactCompiler,
   });
 
-  babelConfig.plugins.push([
+  babelConfig.plugins?.push([
     resolve('babel-plugin-import'),
     {
       style: true,
@@ -53,7 +58,7 @@ const getWebpackConfig: GetWebpackConfigFunction = (modules, options = {}) => {
   ]);
 
   if (pkg.name !== 'antd') {
-    babelConfig.plugins.push([
+    babelConfig.plugins?.push([
       resolve('babel-plugin-import'),
       {
         style: 'css',
@@ -65,7 +70,7 @@ const getWebpackConfig: GetWebpackConfigFunction = (modules, options = {}) => {
   }
 
   if (modules === false) {
-    babelConfig.plugins.push(require.resolve('./replaceLib'));
+    babelConfig.plugins?.push(require.resolve('./replaceLib'));
   }
 
   const config: Configuration = {
@@ -108,6 +113,11 @@ const getWebpackConfig: GetWebpackConfigFunction = (modules, options = {}) => {
 
     module: {
       noParse: [/moment.js/],
+      parser: overrideStrict
+        ? {
+            javascript: { overrideStrict: overrideStrict },
+          }
+        : undefined,
       rules: [
         {
           test: /\.jsx?$/,
@@ -206,9 +216,11 @@ All rights reserved.
         amd: 'react-dom',
       },
     };
-    config.output.library = pkg.name;
-    config.output.libraryTarget = 'umd';
-    config.output.globalObject = 'this';
+    if (config.output) {
+      config.output.library = pkg.name;
+      config.output.libraryTarget = 'umd';
+      config.output.globalObject = 'this';
+    }
     config.optimization = {
       minimizer: [
         new TerserPlugin<{
